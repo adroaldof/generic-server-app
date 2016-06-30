@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/config/express.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api/core</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api/users</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-User">User</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">config</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-app">app</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">config/env</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-config">config</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/APIError.js~APIError.html">APIError</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/APIError.js~ExtendableError.html">ExtendableError</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/config/express.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import bodyParser from &apos;body-parser&apos;;
+import compress from &apos;compression&apos;;
+import cookieParser from &apos;cookie-parser&apos;;
+import cors from &apos;cors&apos;;
+import express from &apos;express&apos;;
+import expressValidation from &apos;express-validation&apos;;
+import expressWinston from &apos;express-winston&apos;;
+import httpStatus from &apos;http-status&apos;;
+import logger from &apos;morgan&apos;;
+import methodOverride from &apos;method-override&apos;;
+
+import APIError from &apos;../helpers/APIError&apos;;
+import config from &apos;./env&apos;;
+import routes from &apos;../api/routes&apos;;
+import winstonInstance from &apos;./winston&apos;;
+
+
+const app = express();
+
+// Parse body params and attach them to req.body
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Enable CORS - Cross Origin Resource Sharing
+app.use(cors());
+
+// Other configurations
+app.use(cookieParser());
+app.use(compress());
+app.use(methodOverride());
+
+// Disable &apos;X-Powered-By&apos; header in response
+app.disable(&apos;x-powered-by&apos;);
+
+// Mount all routes on /api path
+app.use(&apos;/api&apos;, routes);
+
+// Enable detailed API loggin when environment is development
+/* istanbul ignore next */
+if (config.env === &apos;dev&apos;) {
+    expressWinston.requestWhitelist.push(&apos;body&apos;);
+    expressWinston.responseWhitelist.push(&apos;body&apos;);
+
+    app.use(logger(&apos;dev&apos;));
+    app.use(expressWinston.logger({
+            winstonInstance,
+            meta: true,
+            msg: &apos;HTTP {{ req.method }} {{ req.url }} {{ res.statusCode }} {{ res.responseTime }}ms&apos;,
+            colorsStatus: true
+        }));
+}
+
+// Log error in winston transports except when executing test suite
+/* istanbul ignore next */
+if (config.env !== &apos;test&apos;) {
+    app.use(expressWinston.errorLogger({
+        winstonInstance
+    }));
+}
+
+// If error is not an instanceOf APIError, convert it
+/* istanbul ignore next */
+app.use((err, req, res, next) =&gt; {
+    if (err instanceof expressValidation.ValidationError) {
+        const unifiedErrorMessage = err.errors.map(error =&gt; error.messages.join(&apos;. &apos;)).join(&apos; and &apos;);
+        const error = new APIError(unifiedErrorMessage, err.status, true);
+
+        return next(error);
+    } else
+
+    if (!(err instanceof APIError)) {
+        const apiError = new APIError(err.message, err.status, err.isPublic);
+
+        return next(apiError);
+    }
+
+    return next(err);
+});
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) =&gt; {
+    const err = new APIError(&apos;API not found&apos;, httpStatus.NOT_FOUND);
+
+    return next(err);
+});
+
+// Error handler, send stacktrace only during development
+/* jscs: disable */
+app.use((err, req, res, next) =&gt; {
+    res.status(err.status)
+        .json({
+            message: (err.isPublic) ? err.message : httpStatus[err.status],
+            stack: (config.env === &apos;dev&apos;) ? err.stack : {}
+        });
+});
+/* jscs: enable */
+
+
+// Export Express app
+export default app;
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

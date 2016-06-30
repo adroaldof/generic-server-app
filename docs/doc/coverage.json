@@ -1,0 +1,53 @@
+{
+  "coverage": "28.57%",
+  "expectCount": 14,
+  "actualCount": 4,
+  "files": {
+    "src/helpers/APIError.js": {
+      "expectCount": 9,
+      "actualCount": 4,
+      "undocumentLines": [
+        24,
+        23,
+        21,
+        20,
+        22
+      ]
+    },
+    "src/config/express.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        18
+      ]
+    },
+    "src/config/env/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        6
+      ]
+    },
+    "src/api/routes.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        8
+      ]
+    },
+    "src/api/users/users.index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        8
+      ]
+    },
+    "src/api/core/core.index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        4
+      ]
+    }
+  }
+}

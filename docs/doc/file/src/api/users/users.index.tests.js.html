@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/api/users/users.index.tests.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api/core</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">api/users</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-router">router</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-User">User</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">config</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-app">app</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">config/env</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-config">config</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">helpers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/APIError.js~APIError.html">APIError</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/helpers/APIError.js~ExtendableError.html">ExtendableError</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/api/users/users.index.tests.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* globals describe, it */
+
+import chai from &apos;chai&apos;;
+import httpStatus from &apos;http-status&apos;;
+import request from &apos;supertest-as-promised&apos;;
+import { expect } from &apos;chai&apos;;
+
+import app from &apos;../../index&apos;;
+
+
+chai.config.includeStack = true;
+
+
+describe(&apos;User APIs&apos;, () =&gt; {
+    let user = {
+        name: &apos;John Doe&apos;,
+        email: &apos;test@gmail.com&apos;,
+        mobileNumber: &apos;4887658765&apos;
+    };
+
+    describe(&apos;POST /api/users&apos;, () =&gt; {
+        it(&apos;should create a new user&apos;, (done) =&gt; {
+            request(app)
+                .post(&apos;/api/users&apos;)
+                .send(user)
+                .expect(httpStatus.OK)
+                .then((res) =&gt; {
+                    expect(res.body.name).to.equal(user.name);
+                    expect(res.body.email).to.equal(user.email);
+                    expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+                    user = res.body;
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+
+        it(&apos;should not create an user if no email is supplied&apos;, (done) =&gt; {
+            request(app)
+                .post(&apos;/api/users&apos;)
+                .send({
+                    name: &apos;John Doe&apos;,
+                    email: &apos;&apos;,
+                    mobileNumber: &apos;1234567890&apos;
+                })
+                .expect(httpStatus.BAD_REQUEST)
+                .then(res =&gt; {
+                    expect(res.body.message).to.contains(`&quot;email&quot; is not allowed to be empty`);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+
+        it(&apos;should not create an user if no mobileNumber is supplied&apos;, (done) =&gt; {
+            request(app)
+                .post(&apos;/api/users&apos;)
+                .send({
+                    name: &apos;John Doe&apos;,
+                    email: &apos;test@gmail.com&apos;,
+                    mobileNumber: &apos;&apos;
+                })
+                .expect(httpStatus.BAD_REQUEST)
+                .then(res =&gt; {
+                    expect(res.body.message).to.contains(`&quot;mobileNumber&quot; is not allowed to be empty`);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+
+    });
+
+
+    describe(&apos;GET /api/users/:userId&apos;, () =&gt; {
+        it(&apos;should get user details&apos;, (done) =&gt; {
+            request(app)
+                .get(`/api/users/${ user._id }`)
+                .expect(httpStatus.OK)
+                .then((res) =&gt; {
+                    expect(res.body.name).to.equal(user.name);
+                    expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+
+        it(&apos;should report error with message, Not found, when user does not exists&apos;, (done) =&gt; {
+            request(app)
+                .get(&apos;/api/users/575e0308f7722f9771aaaaaa&apos;)
+                .expect(httpStatus.NOT_FOUND)
+                .then((res) =&gt; {
+                    expect(res.body.message).to.equal(&apos;Not Found&apos;);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+
+        it(&apos;should handle mongoose CastError - Cast to an wrong ObjectId&apos;, (done) =&gt; {
+            request(app)
+                .get(&apos;/api/users/56z787zzz67fc&apos;)
+                .expect(httpStatus.INTERNAL_SERVER_ERROR)
+                .then((res) =&gt; {
+                    expect(res.body.message).to.equal(&apos;Internal Server Error&apos;);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+    });
+
+    describe(&apos;PUT /api/users/:userId&apos;, () =&gt; {
+        it(&apos;should update user details&apos;, (done) =&gt; {
+            user.name = &apos;John Doe Doe&apos;;
+
+            request(app)
+                .put(`/api/users/${ user._id }`)
+                .send(user)
+                .expect(httpStatus.OK)
+                .then((res) =&gt; {
+                    expect(res.body.name).to.equal(&apos;John Doe Doe&apos;);
+                    expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+    });
+
+
+    describe(&apos;GET /api/users&apos;, () =&gt; {
+        it(&apos;should get all users&apos;, (done) =&gt; {
+            request(app)
+                .get(&apos;/api/users&apos;)
+                .expect(httpStatus.OK)
+                .then((res) =&gt; {
+                    expect(res.body).to.be.an(&apos;array&apos;);
+                    expect(res.body.length).to.be.above(0);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+    });
+
+
+    describe(&apos;DELETE /api/users&apos;, () =&gt; {
+        it(&apos;should delete an user&apos;, (done) =&gt; {
+            request(app)
+                .delete(`/api/users/${ user._id }`)
+                .expect(httpStatus.OK)
+                .then((res) =&gt; {
+                    expect(res.body.name).to.equal(&apos;John Doe Doe&apos;);
+                    expect(res.body.mobileNumber).to.equal(user.mobileNumber);
+                    done();
+                }, (err) =&gt; {
+                    expect(err).to.be.null;
+                    done();
+                });
+        });
+    });
+});
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
