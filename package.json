@@ -1,6 +1,6 @@
 {
   "name": "generic-app-server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Generic server sample",
   "author": "Adroaldo de Andrade <adroaldof@gmail.com>",
   "main": "src/index.js",
