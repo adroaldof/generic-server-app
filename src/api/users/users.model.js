@@ -32,9 +32,8 @@ UserSchema.statics = {
     /**
      * Retrieve an user information
      *
-     * @access public
-     * @param {ObjectId} id The ObjectId referent to user identification
-     * @returns {Promise<User, APIError>} Returns a promise with the user information or an error
+     * @apiParam {ObjectId} id The ObjectId referent to user identification
+     * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
      */
     get (id) {
         const err = new APIError('No such user found!', httpStatus.NOT_FOUND);
@@ -51,13 +50,13 @@ UserSchema.statics = {
             });
     },
 
+
     /**
      * List users in descending order of 'createdAt' timestamp
      *
-     * @access public
-     * @param {Number} skip Number of users to be skipped
-     * @param {Number} limit Limit number or users to be returned
-     * @returns {Promise<User[]>} Returns an array of users objects
+     * @apiParam {Number} skip Number of users to be skipped
+     * @apiParam {Number} limit Limit number or users to be returned
+     * @apiSuccess {Promise<User[]>} Returns an array of users objects
      */
     list ({skip = 0, limit = 50} = {}) {
         return this.find()
