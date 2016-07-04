@@ -3,6 +3,28 @@ import express from 'express';
 
 const router = express.Router();
 
+
+router.route('/')
+    .get((req, res, next) => {
+        res.render('index', {user: {}});
+    });
+
+router.route('/login')
+    .get((req, res, next) => {
+        res.render('login', {});
+    });
+
+router.route('/register')
+    .get((req, res) => {
+        res.render('register', {});
+    });
+
+router.route('/logout')
+    .get((req, res, next) => {
+        res.render('index', {});
+    });
+
+
 /**
  * System check route
  */
