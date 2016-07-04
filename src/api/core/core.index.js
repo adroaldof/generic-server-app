@@ -6,7 +6,7 @@ const router = express.Router();
 /**
  * System check route
  */
-router.route('/')
+router.route('/json')
     .get((req, res) => {
         res.send({
             system: 'OK',
