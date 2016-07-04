@@ -1,11 +1,17 @@
-extends layout
+extends base
 
 block content
-    if (!user)
-        a(href='/login') Login
-        br
-        a(href='/register') Register
-    if (user)
-        p You are currently logged in as #{ user.username }
-        a(href='/logout') Logout
+    .container
+        h1 Welcome
+        if (user && !user.name)
+            p.lead Click the choice you want
+            a(href='/api/core/login')
+                button.btn.btn-primary Login
+            &nbsp;
+            a(href='/api/core/register')
+                button.btn.btn-success Register
+        if (user && user.name)
+            p.lead You are currently logged in as #{ user.name }
+            a(href='/api/core/logout')
+                button.btn.btn-success Lougout
 
