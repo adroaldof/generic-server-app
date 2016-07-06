@@ -8,6 +8,7 @@ import expressWinston from 'express-winston';
 import httpStatus from 'http-status';
 import logger from 'morgan';
 import methodOverride from 'method-override';
+import path from 'path';
 
 import APIError from '../helpers/APIError';
 import config from './env';
@@ -16,6 +17,10 @@ import winstonInstance from './winston';
 
 
 const app = express();
+
+// View engine setup
+app.set('views', path.resolve(__dirname, '../../public/views/'));
+app.set('view engine', 'jade');
 
 // Parse body params and attach them to req.body
 app.use(bodyParser.json());
