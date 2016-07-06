@@ -8,7 +8,6 @@ import expressWinston from 'express-winston';
 import httpStatus from 'http-status';
 import logger from 'morgan';
 import methodOverride from 'method-override';
-import passport from 'passport';
 import path from 'path';
 
 import APIError from '../helpers/APIError';
@@ -56,8 +55,6 @@ function init (app) {
     });
 
     app.use(session(sessionOpts));
-    app.use(passport.initialize());
-    app.use(passport.session());
 
     // Enable detailed API loggin when environment is development
     /* istanbul ignore next */

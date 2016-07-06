@@ -7,6 +7,7 @@ import config from './config/env';
 
 import { default as initDb } from './config/mongoose';
 import { default as initExpress } from './config/express';
+import { default as initPassport } from './config/passport';
 import { default as initModels } from './config/models';
 
 
@@ -28,6 +29,7 @@ app.set('debug', debug);
  */
 initDb(app);
 initModels(app);
+initPassport();
 initExpress(app);
 
 
