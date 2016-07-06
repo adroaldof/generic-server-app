@@ -1,46 +1,36 @@
 'use strict';
 
-import mongoose from 'mongoose';
-import Promise from 'bluebird';
+import express from 'express';
 
 import app from './config/express';
 import config from './config/env';
 
+import { default as initDb } from './config/mongoose';
 
+
+const ENV = process.env.NODE_ENV || 'dev';
+const app = express();
 const debug = require('debug')('generic-server-app:index');
 
+// Set express app variables
+app.set('root', __dirname);
+app.set('env', ENV);
+app.set('config', config);
 
-// Promisify mongoose
-Promise.promisifyAll(mongoose);
+/**
+ * Start system modules
+ */
+initDb(app);
+initExpress(app);
 
-
-// Connect to mongo db
-mongoose.connect(config.db, {
-    server: {
-        socketOptions: {
-            keepAlive: 1
-        }
-    }
-});
-
-
-// Deal with mongoose connections
-/* istanbul ignore next */
-mongoose.connection
-    .on('connected', () => {
-        debug(`Connected to Mongo DB ${ config.db }`);
-    })
-    .on('disconnected', () => {
-        debug(`Disconnected to Mongo DB ${ config.db }`);
-    })
-    .on('error', () => {
-        debug(`Unable to connect to database ${ config.db }`);
+/**
+ * Start app
+ */
+if (!module.parent) {
+    app.listen(config.port, () => {
+        debug(`Server started on port ${ config.port } (${ config.env })`);
     });
-
-
-app.listen(config.port, () => {
-    debug(`Server started on port ${ config.port } (${ config.env })`);
-});
+}
 
 export default app;
 
