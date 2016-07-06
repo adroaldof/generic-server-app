@@ -15,7 +15,7 @@ const debug = require('debug')('generic-server-app:index');
 /**
  * Set express app variables
  */
-app.set('root', __dirname);
+app.set('root', path.resolve(__dirname, '..'));
 app.set('env', ENV);
 app.set('config', config);
 app.set('debug', debug);
