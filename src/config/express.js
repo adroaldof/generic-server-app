@@ -28,7 +28,7 @@ function init (app) {
     };
 
     // View engine setup
-    app.set('views', path.resolve(__dirname, '../../public/views/'));
+    app.set('views', path.resolve(__dirname, '../../views/'));
     app.set('view engine', 'jade');
 
     app.set('trust proxy');
