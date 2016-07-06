@@ -1,13 +1,14 @@
 import bodyParser from 'body-parser';
 import compress from 'compression';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import express from 'express';
+import session from 'express-session';
 import expressValidation from 'express-validation';
+import expressValidator from 'express-validator';
 import expressWinston from 'express-winston';
 import httpStatus from 'http-status';
 import logger from 'morgan';
 import methodOverride from 'method-override';
+import passport from 'passport';
 import path from 'path';
 
 import APIError from '../helpers/APIError';
@@ -16,91 +17,110 @@ import routes from '../api/routes';
 import winstonInstance from './winston';
 
 
-const app = express();
+function init (app) {
+    // import MongoStore from 'connect-mongo';
+    const MongoStore = require('connect-mongo')(session);
+    const sessionOpts = {
+        secret: config.session.secret,
+        key: 'skey.sid',
+        resave: false,
+        saveUninitialized: false
+    };
 
-// View engine setup
-app.set('views', path.resolve(__dirname, '../../public/views/'));
-app.set('view engine', 'jade');
+    // View engine setup
+    app.set('views', path.resolve(__dirname, '../../public/views/'));
+    app.set('view engine', 'jade');
 
-// Parse body params and attach them to req.body
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+    app.set('trust proxy');
+    app.use(expressValidator());
 
-// Enable CORS - Cross Origin Resource Sharing
-app.use(cors());
+    // Parse body params and attach them to req.body
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-// Other configurations
-app.use(cookieParser());
-app.use(compress());
-app.use(methodOverride());
+    // Enable CORS - Cross Origin Resource Sharing
+    app.use(cors());
 
-// Disable 'X-Powered-By' header in response
-app.disable('x-powered-by');
+    // Other configurations
+    app.use(compress());
+    app.use(methodOverride());
 
-// Mount all routes on /api path
-app.use('/api', routes);
+    // Disable 'X-Powered-By' header in response
+    app.disable('x-powered-by');
 
-// Enable detailed API loggin when environment is development
-/* istanbul ignore next */
-if (config.env === 'dev') {
-    expressWinston.requestWhitelist.push('body');
-    expressWinston.responseWhitelist.push('body');
+    // Mount all routes on /api path
+    app.use('/api', routes);
 
-    app.use(logger('dev'));
-    app.use(expressWinston.logger({
+    sessionOpts.store = new MongoStore({
+        url: config.db
+    });
+
+    app.use(session(sessionOpts));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    // Enable detailed API loggin when environment is development
+    /* istanbul ignore next */
+    if (config.env === 'dev') {
+        expressWinston.requestWhitelist.push('body');
+        expressWinston.responseWhitelist.push('body');
+
+        app.use(logger('dev'));
+        app.use(expressWinston.logger({
             winstonInstance,
             meta: true,
             msg: 'HTTP {{ req.method }} {{ req.url }} {{ res.statusCode }} {{ res.responseTime }}ms',
             colorsStatus: true
         }));
-}
-
-// Log error in winston transports except when executing test suite
-/* istanbul ignore next */
-if (config.env !== 'test') {
-    app.use(expressWinston.errorLogger({
-        winstonInstance
-    }));
-}
-
-// If error is not an instanceOf APIError, convert it
-/* istanbul ignore next */
-app.use((err, req, res, next) => {
-    if (err instanceof expressValidation.ValidationError) {
-        const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
-        const error = new APIError(unifiedErrorMessage, err.status, true);
-
-        return next(error);
-    } else
-
-    if (!(err instanceof APIError)) {
-        const apiError = new APIError(err.message, err.status, err.isPublic);
-
-        return next(apiError);
     }
 
-    return next(err);
-});
+    // Log error in winston transports except when executing test suite
+    /* istanbul ignore next */
+    if (config.env !== 'test') {
+        app.use(expressWinston.errorLogger({
+            winstonInstance
+        }));
+    }
 
-// Catch 404 and forward to error handler
-app.use((req, res, next) => {
-    const err = new APIError('API not found', httpStatus.NOT_FOUND);
+    // If error is not an instanceOf APIError, convert it
+    /* istanbul ignore next */
+    app.use((err, req, res, next) => {
+        if (err instanceof expressValidation.ValidationError) {
+            const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
+            const error = new APIError(unifiedErrorMessage, err.status, true);
 
-    return next(err);
-});
+            return next(error);
+        } else
 
-// Error handler, send stacktrace only during development
-/* jscs: disable */
-app.use((err, req, res, next) => {
-    res.status(err.status)
-        .json({
-            message: (err.isPublic) ? err.message : httpStatus[err.status],
-            stack: (config.env === 'dev') ? err.stack : {}
-        });
-});
-/* jscs: enable */
+            if (!(err instanceof APIError)) {
+                const apiError = new APIError(err.message, err.status, err.isPublic);
+
+                return next(apiError);
+            }
+
+            return next(err);
+    });
+
+    // Catch 404 and forward to error handler
+    app.use((req, res, next) => {
+        const err = new APIError('API not found', httpStatus.NOT_FOUND);
+
+        return next(err);
+    });
+
+    // Error handler, send stacktrace only during development
+    /* jscs: disable */
+    app.use((err, req, res, next) => {
+        res.status(err.status)
+            .json({
+                message: (err.isPublic) ? err.message : httpStatus[err.status],
+                stack: (config.env === 'dev') ? err.stack : {}
+            });
+    });
+    /* jscs: enable */
+}
 
 
 // Export Express app
-export default app;
+export default init;
 
