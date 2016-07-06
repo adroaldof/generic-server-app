@@ -7,6 +7,7 @@ import config from './config/env';
 
 import { default as initDb } from './config/mongoose';
 import { default as initExpress } from './config/express';
+import { default as initModels } from './config/models';
 
 
 const ENV = process.env.NODE_ENV || 'dev';
@@ -26,6 +27,7 @@ app.set('debug', debug);
  * Start system modules
  */
 initDb(app);
+initModels(app);
 initExpress(app);
 
 
