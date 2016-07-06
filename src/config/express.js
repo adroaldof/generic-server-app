@@ -13,7 +13,7 @@ import path from 'path';
 
 import APIError from '../helpers/APIError';
 import config from './env';
-import routes from '../api/routes';
+import { default as routes } from './routes';
 import winstonInstance from './winston';
 
 
@@ -49,7 +49,7 @@ function init (app) {
     app.disable('x-powered-by');
 
     // Mount all routes on /api path
-    app.use('/api', routes);
+    app.use('/api', routes(app));
 
     sessionOpts.store = new MongoStore({
         url: config.db
