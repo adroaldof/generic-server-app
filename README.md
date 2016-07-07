@@ -54,3 +54,5 @@ The follow references were used to build this project. Thank you so much guys +1
 - [Pranav Sathyanarayanan - node-backend-boilerplate](https://github.com/PranavSathy/node-backend-boilerplate)
 - [Madhusudhan Srinivasa - node-express-mongoose-demo](https://github.com/madhums/node-express-mongoose-demo)
 - [Sahat Yalkabov - hackathon-starter](https://github.com/sahat/hackathon-starter)
+- [Robert Onodi - Node.js authentication](http://blog.robertonodi.me/node-authentication-series-email-and-password/)
+
