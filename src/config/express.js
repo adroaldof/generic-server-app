@@ -8,16 +8,20 @@ import expressWinston from 'express-winston';
 import httpStatus from 'http-status';
 import logger from 'morgan';
 import methodOverride from 'method-override';
+import mongoose from 'mongoose';
+import passport from 'passport';
 import path from 'path';
 
 import APIError from '../helpers/APIError';
 import config from './env';
 import { default as routes } from './routes';
 import winstonInstance from './winston';
+import localStrategy from './strategies/local';
 
 
 function init (app) {
     // import MongoStore from 'connect-mongo';
+    const User = mongoose.model('User');
     const MongoStore = require('connect-mongo')(session);
     const sessionOpts = {
         secret: config.session.secret,
@@ -47,11 +51,27 @@ function init (app) {
     // Disable 'X-Powered-By' header in response
     app.disable('x-powered-by');
 
+    // Deal with sessions
     sessionOpts.store = new MongoStore({
         url: config.db
     });
 
     app.use(session(sessionOpts));
+
+    // Deal with passport
+    app.use(passport.initialize());
+    app.use(passport.session());
+    localStrategy(passport);
+
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+        User.findById(id, (err, user) => {
+            done(err, user);
+        });
+    });
 
     // Mount all routes on /api path
     app.use('/api', routes(app));
