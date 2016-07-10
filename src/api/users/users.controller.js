@@ -73,16 +73,6 @@ function load (req, res, next, id) {
 
 
 /**
- * Get user
- *
- * @apiSuccess {User} Returns an user
- */
-function get (req, res) {
-    return res.json(req.user);
-}
-
-
-/**
  * @api {DELETE} /api/{version}/user/:id Remove one user from system
  * @apiName RemoveUser
  * @apiGroup User
@@ -129,5 +119,5 @@ function update (req, res, next) {
 }
 
 
-export default {load, get, create, update, list, remove};
+export default {load, create, update, list, remove};
 
