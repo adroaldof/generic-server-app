@@ -6,9 +6,8 @@ import path from 'path';
 import config from './config/env';
 
 import { default as initDb } from './config/mongoose';
-import { default as initExpress } from './config/express';
-import { default as initPassport } from './config/passport';
 import { default as initModels } from './config/models';
+import { default as initExpress } from './config/express';
 
 
 const ENV = process.env.NODE_ENV || 'dev';
@@ -21,7 +20,6 @@ const debug = require('debug')('generic-server-app:index');
 app.set('root', path.resolve(__dirname, '..'));
 app.set('env', ENV);
 app.set('config', config);
-app.set('debug', debug);
 
 
 /**
@@ -29,7 +27,6 @@ app.set('debug', debug);
  */
 initDb(app);
 initModels(app);
-initPassport();
 initExpress(app);
 
 
