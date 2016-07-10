@@ -32,7 +32,8 @@ const paths = {
                   api: './docs/api'
               },
               public: './public',
-              src: './src'
+              src: './src',
+              views: './views'
           },
           files: {
               js: [
@@ -264,7 +265,8 @@ gulp.task('nodemon', () => {
             paths.dirs.docs.base,
             paths.dirs.coverage,
             paths.dirs.public,
-            paths.dirs.src
+            paths.dirs.src,
+            paths.dirs.views
         ],
         ignore: [
             'node_module/',
