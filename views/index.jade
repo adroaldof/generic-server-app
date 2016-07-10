@@ -1,17 +1,24 @@
-extends base
+extends ./base
 
 block content
-    .container
-        h1 Welcome
-        if (user && !user.name)
-            p.lead Click the choice you want
-            a(href='/api/core/login')
-                button.btn.btn-primary Login
-            &nbsp;
-            a(href='/api/core/register')
-                button.btn.btn-success Register
-        if (user && user.name)
-            p.lead You are currently logged in as #{ user.name }
-            a(href='/api/core/logout')
-                button.btn.btn-success Lougout
+    if (!locals.user)
+        .container
+            .row
+                .col-xs-12
+                    h1 Welcome
+            .row
+                .col-xs-12
+                    p.lead Click the choice you want
+                    a(href='/api/core/login')
+                        button.btn.btn-primary Login
+                    &nbsp;
+                    a(href='/api/core/register')
+                        button.btn.btn-success Register
+    else
+        .container
+            .row
+                .col-xs-12
+                    h1 Oops!
+                    p Can not find user
+                    p You shoud not see this message
 
