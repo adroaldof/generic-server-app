@@ -2,14 +2,57 @@ doctype html
 html(lang='en')
     head
         title='Generic Server App'
-        // link(rel='shortcut icon', href='/favicon.png')
+        link(rel='shortcut icon', href='images/favicon.png')
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
-        link(rel='stylesheet', href='css/styles.css')
+        // link(rel='stylesheet', href='css/styles.css')
     body
-        block content
+        .navbar.navbar-default.navbar-static-top
+            .container
+                .navbar-header
+                    button(class='navbar-toggle collapsed', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+                        .sr-only Toggle navigation
+                        .icon-bar
+                        .icon-bar
+                        .icon-bar
+                    a(href='/api/core')
+                        .navbar-brand Generic Server App
+                #navbar.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li.active
+                            a(href='/api/core') Home
+                    ul.nav.navbar-nav.navbar-right
+                        if (!locals.user)
+                            li
+                                a(href='/api/core/login') Login
+                            li.active
+                                a(href='/api/core/register') Signup
+                        if (locals.user && locals.user.email)
+                            li.dropdown
+                                a(href='$', class='dropdonw-toggle', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                                    | User area
+                                    span.caret
+                                ul.dropdown-menu
+                                    li
+                                        a(href='/api/core/user-info/#{ user._id }') My Info
+                                    li
+                                        a(href='/api/core/user-update/#{ user._id }') Update Info
+                                    li
+                                        a(href='/api/core/user-change-password/#{ user._id }') Change Password
+                                    li.divider(role='separator')
+                                    li
+                                        a(href='/api/core/logout') Logout
 
+        block content
+            .container
+                .row
+                    .col-md-6.col-xs-12
+                        h1 Welcome to Generic Server App
+                        p Here you can Signup an user
+
+        script(src='//code.jquery.com/jquery-2.2.4.min.js')
         script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+        script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js')
 
