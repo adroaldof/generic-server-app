@@ -16,12 +16,14 @@ function init (app) {
     router.use('/users', userRoutes);
 
     /**
-     * Util pages routes
+     * General static routes
      */
     router.use('/coverage', express.static(path.resolve(app.get('root'), 'coverage/lcov-report')));
     router.use('/docs', express.static(path.resolve(app.get('root'), 'docs/api')));
     router.use('/documentation', express.static(path.resolve(app.get('root'), 'docs/doc')));
     router.use('/public', express.static(path.resolve(app.get('root'), 'public')));
+    router.use('/css', express.static(path.resolve(app.get('root'), 'public/css')));
+    router.use('/images', express.static(path.resolve(app.get('root'), 'public/images')));
 
     return router;
 }

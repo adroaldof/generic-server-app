@@ -47,14 +47,14 @@ function init (app) {
     // Disable 'X-Powered-By' header in response
     app.disable('x-powered-by');
 
-    // Mount all routes on /api path
-    app.use('/api', routes(app));
-
     sessionOpts.store = new MongoStore({
         url: config.db
     });
 
     app.use(session(sessionOpts));
+
+    // Mount all routes on /api path
+    app.use('/api', routes(app));
 
     // Enable detailed API loggin when environment is development
     /* istanbul ignore next */
