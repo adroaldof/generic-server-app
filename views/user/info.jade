@@ -1,0 +1,28 @@
+extends ../base
+
+block content
+    if (locals.user && locals.user.email)
+        .container
+            .row
+                .col-md-6.col-xs-12
+                    h1 Hello #{ user.name || user.email }
+            .row
+                .col-md-6.col-xs-12
+                    h3 Your information
+                    .jumbotron
+                        p Id: #{ user._id || 'No Id supplied' }
+                        p Name: #{ user.name || 'No name supplied' }
+                        p Email: #{ user.email || 'You should see your email here' }
+                        p Phone: #{ user.mobileNumber || 'No phone supplied' }
+                        // p Created At: +moment(user.createdAt).format('dd/MM/yyyy hh:mm:ss')
+                        // p Updated At: +moment(user.updatedAt).format('dd/MM/yyyy hh:mm:ss')
+                .col-md-6.col-xs-12
+                    h3 Update your information
+                    p Here you can find some operations you can do
+                    a(href='/api/core/user-update/#{ user._id }')
+                        button.btn.btn-primary Update Info
+                    &nbsp;
+                    a(href='/api/core/user-password/#{ user._id }')
+                        button.btn.btn-primary Change Password
+
+
