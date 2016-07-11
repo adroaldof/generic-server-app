@@ -14,13 +14,14 @@ import User from './users.model';
  * @apiError {Object} error Error message
  */
 function create (req, res, next) {
-    const user = new User({
+    const userData = {
         name: req.body.name,
         email: req.body.email,
-        mobileNumber: req.body.mobileNumber
-    });
+        mobileNumber: req.body.mobileNumber,
+        password: req.body.password
+    };
 
-    user.saveAsync()
+    user.register(userData)
         .then((savedUser) => res.json(savedUser))
         .error((error) => next(error));
 }

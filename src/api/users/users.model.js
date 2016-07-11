@@ -1,19 +1,18 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Promise from 'bluebird';
+import _ from 'lodash';
 
 import APIError from '../../helpers/APIError';
+import passwordHelper from '../../helpers/password';
 
 
 const UserSchema = new mongoose.Schema({
     name: {type: String},
     email: {type: String, required: true, unique: true},
-    mobileNumber: {
-        type: String,
-        required: true,
-        unique: true,
-        match: [/^[1-9][0-9]{8,15}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
-    }
+    password: {type: String, required: true, select: false},
+    passwordSalt: {type: String, required: true, select: false},
+    mobileNumber: {type: String}
 }, {
     timestamps: true
 });
@@ -30,6 +29,37 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.statics = {
     /**
+     * Crete a new user
+     *
+     * @apiParam {Object} opts User data
+     * @apiParam {Function} callback Callback function
+     */
+    register (opts, callback) {
+        const self = this;
+        const data = _.cloneDeep(opts);
+
+        passwordHelper.hashPassword(opts.password, (err, hashedPassword, salt) => {
+            if (err) {
+                return callback(err);
+            }
+
+            data.password = hashedPassword;
+            data.passwordSalt = salt;
+
+            self.model('User').create(data, (err, user) => {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                user.password = undefined;
+                user.passwordSalt = undefined;
+
+                callback(err, user);
+            });
+        });
+    },
+
+
      * Retrieve an user information
      *
      * @apiParam {ObjectId} id The ObjectId referent to user identification

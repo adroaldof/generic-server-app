@@ -1,6 +1,7 @@
 import express from 'express';
 
 
+import accounts from '../accounts/accounts.controller';
 const router = express.Router();
 
 
@@ -28,7 +29,22 @@ router.route('/login')
 
 router.route('/register')
     .get((req, res) => {
-        res.render('register', {});
+        return res.format({
+            html: () => {
+                res.render('auth/register', {});
+            },
+
+            json: () => {
+                res.send({
+                    method: 'GET',
+                    path: '/register',
+                    info: 'Success'
+                });
+            }
+        });
+    })
+    .post(accounts.signup);
+
     });
 
 router.route('/logout')
