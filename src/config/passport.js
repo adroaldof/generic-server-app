@@ -12,7 +12,9 @@ function init () {
     });
 
     passport.deserializeUser((id, done) => {
-        User.findById(id, done);
+        User.findById(id, (err, user) => {
+            done(err, user);
+        });
     });
 
     // Load strategies
