@@ -111,14 +111,16 @@ function remove (req, res, next) {
  * @apiError {Object} error Error message
  */
 function update (req, res, next) {
-    const user = req.user;
+    const user = req.resources.user;
 
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.mobileNumber = req.body.mobileNumber;
+    req.resources = req.resources || {};
+    _.assign(user, req.body);
 
     user.saveAsync()
-        .then((savedUser) => res.json(savedUser))
+        .then((updatedUser) => {
+            req.resources.user = updatedUser;
+            return next();
+        })
         .error((error) => next(error));
 }
 

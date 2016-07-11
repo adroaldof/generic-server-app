@@ -80,6 +80,38 @@ router.route('/user-info/:id')
         });
     });
 
+router.route('/user-update/:id')
+    .get(userCtrl.load, (req, res, next) => {
+        const user = req.resources.user;
+
+        return res.format({
+            html: () => {
+                res.render('user/update', { user: user });
+            },
+
+            json: () => {
+                res.send({
+                    user: user,
+                    info: 'Success loading user'
+                });
+            }
+        });
+    })
+    .post(userCtrl.load, userCtrl.update, (req, res, next) => {
+        const user = req.resources.user || {};
+
+        return res.format({
+            html: () => {
+                res.render('user/info', { user: user });
+            },
+
+            json: () => {
+                res.send({
+                    user: user,
+                    info: 'Success updating user'
+                });
+            }
+        });
     });
 
     });
