@@ -55,4 +55,5 @@ The follow references were used to build this project. Thank you so much guys +1
 - [Madhusudhan Srinivasa - node-express-mongoose-demo](https://github.com/madhums/node-express-mongoose-demo)
 - [Sahat Yalkabov - hackathon-starter](https://github.com/sahat/hackathon-starter)
 - [Robert Onodi - Node.js authentication](http://blog.robertonodi.me/node-authentication-series-email-and-password/)
+- [Michael Herman - User Authentication With Passport and Express 4](https://github.com/mjhea0/passport-local-express4)
 
