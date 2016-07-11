@@ -22,7 +22,10 @@ function signin (req, res, next) {
                 },
 
                 json: () => {
-                    res.send({ user: user });
+                    res.send({
+                        user: user,
+                        info: info
+                    });
                 }
             });
         });

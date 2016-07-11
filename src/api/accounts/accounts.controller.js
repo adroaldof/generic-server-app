@@ -1,15 +1,12 @@
 import _ from 'lodash';
-import mongoose from 'mongoose';
 
-// const User = mongoose.model('User');
 import User from '../users/users.model';
 
 
-// function signup (req, res, next) {
 function signup (req, res, next) {
     // ToDo: Email and passowrd validation
 
-    const userData = _.pick(req.body, 'email', 'password');
+    const userData = _.pick('name', 'email', 'password');
 
     User.register(userData, (err, user) => {
         if (err && (err.code === 11000 || err.code === 11001)) {

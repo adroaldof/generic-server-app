@@ -22,7 +22,7 @@ function create (req, res, next) {
         password: req.body.password
     };
 
-    user.register(userData)
+    User.register(userData)
         .then((savedUser) => res.json(savedUser))
         .error((error) => next(error));
 }
@@ -141,14 +141,16 @@ function update (req, res, next) {
  */
 function changePassword (req, res, next) {
     const user = req.resources.user;
+    const info = req.body;
 
     req.resources = req.resources || {};
 
-    User.changePassword(user._id, req.body.password, req.body.newPassword, (err, changed) => {
+    User.changePassword(user._id, info.password, info.newPassword, (err, changedInfo) => {
         if (err) {
             return next(err);
         }
 
+        req.resources.info = changedInfo;
         return next();
     });
 }

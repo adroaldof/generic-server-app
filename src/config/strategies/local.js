@@ -1,6 +1,5 @@
 // import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import mongoose from 'mongoose';
 
 
 // const User = mongoose.model('User');

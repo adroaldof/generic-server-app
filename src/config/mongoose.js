@@ -6,6 +6,14 @@ import config from './env';
 
 const debug = require('debug')('generic-server-app:index');
 
+function closeConnection () {
+    // Close mongoose connection
+    mongoose.connection.close(() => {
+        debug(`Closing connection to Mongo DB ${ config.db }`);
+        process.exit(0);
+    });
+}
+
 function init (app) {
     // Promisify mongoose
     Promise.promisifyAll(mongoose);
@@ -44,14 +52,6 @@ function init (app) {
     }
 
     return mongoose;
-}
-
-function closeConnection () {
-    // Close mongoose connection
-    mongoose.connection.close(() => {
-        debug(`Closing connection to Mongo DB ${ config.db }`);
-        process.exit(0);
-    });
 }
 
 export default init;
