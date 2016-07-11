@@ -1,4 +1,5 @@
 import User from './users.model';
+import _ from 'lodash';
 
 /**
  * @api {POST} /api/{version}/user Create a new user
@@ -125,5 +126,33 @@ function update (req, res, next) {
 }
 
 
-export default {load, create, update, list, remove};
+/**
+ * @api {PUT} /api/{version}/user/:id Change password of an existing user
+ * @apiName UpdateUser
+ * @apiGroup User
+ *
+ * @apiParam {String} name name of user
+ * @apiParam {String} mobileNumber Mobile phone number
+ *
+ * @apiParam (Login) {String} pass Only logged in users can post this.
+ *
+ * @apiSuccess {User} user Returns the saved user
+ * @apiError {Object} error Error message
+ */
+function changePassword (req, res, next) {
+    const user = req.resources.user;
+
+    req.resources = req.resources || {};
+
+    User.changePassword(user._id, req.body.password, req.body.newPassword, (err, changed) => {
+        if (err) {
+            return next(err);
+        }
+
+        return next();
+    });
+}
+
+
+export default {load, create, update, changePassword, list, remove};
 

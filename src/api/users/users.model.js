@@ -101,6 +101,60 @@ UserSchema.statics = {
     },
 
 
+    /**
+     * Retrieve an user information
+     *
+     * @apiParam {ObjectId} id The ObjectId referent to user identification
+     * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
+     */
+    changePassword (id, oldPassword, newPassword, callback) {
+        const self = this;
+
+        self.findById({ _id: id })
+            .select('+password +passwordSalt')
+            .exec((err, user) => {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                if (!user) {
+                    return callback(err, user);
+                }
+
+                passwordHelper.verify(oldPassword, user.password, user.passwordSalt, (err, result) => {
+                    if (err) {
+                        return callback(err, null);
+                    }
+
+                    if (!result) {
+                        const PassNoMatchError = new Error('Old password does not match');
+                        PassNoMatchError.type = 'old_password_does_not_match';
+                        return callback(PassNoMatchError, null);
+                    }
+
+                    passwordHelper.hashPassword(newPassword, (err, hashedPassword, salt) => {
+                        user.password = hashedPassword;
+                        user.passwordSalt = salt;
+
+                        user.save((err) => {
+                            if (err) {
+                                return callback(err, null);
+                            }
+
+                            if (callback) {
+                                return callback(err, {
+                                    success: true,
+                                    message: 'Password change succefully'
+                                });
+                            }
+                        });
+                    });
+                });
+            });
+    },
+
+
+    /**
      * Retrieve an user information
      *
      * @apiParam {ObjectId} id The ObjectId referent to user identification
