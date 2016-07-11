@@ -6,7 +6,19 @@ const router = express.Router();
 
 router.route('/')
     .get((req, res, next) => {
-        res.render('index', {user: {}});
+        return res.format({
+            html: () => {
+                res.render('index', {});
+            },
+
+            json: () => {
+                res.send({
+                    method: 'GET',
+                    path: '/',
+                    info: 'Success'
+                });
+            }
+        });
     });
 
 router.route('/login')
