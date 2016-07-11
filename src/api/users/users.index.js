@@ -22,7 +22,7 @@ router.route('/')
  * {GET/PUT/DELETE} /api/users/:userId
  */
 router.route('/:userId')
-    .get(userCtrl.get)
+    .get(userCtrl.load)
     .put(validate(validator.updateUser), userCtrl.update)
     .delete(userCtrl.remove);
 

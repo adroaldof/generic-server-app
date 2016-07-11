@@ -50,7 +50,7 @@ function list (req, res, next) {
 
 
 /**
- * @api {GET} /api/{version}/user/:id Load an user and append to request object
+ * @api {GET} /api/{version}/user/:id Load an user and append to resources on request object
  * @apiName LoadUser
  * @apiGroup User
  *
@@ -61,10 +61,13 @@ function list (req, res, next) {
  * @apiSuccess {User} user Returns an user
  * @apiError {Object} error Error message
  */
-function load (req, res, next, id) {
-    User.get(id)
+function load (req, res, next) {
+    const userId = req.params.id;
+    req.resources = req.resources || {};
+
+    User.get(userId)
         .then((user) => {
-            req.user = user;
+            req.resources.user = user;
             return next();
         })
         .error((error) => {

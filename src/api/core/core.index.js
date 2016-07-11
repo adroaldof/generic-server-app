@@ -3,6 +3,9 @@ import express from 'express';
 
 import accounts from '../accounts/accounts.controller';
 import authCtrl from '../auth/auth.controller';
+import userCtrl from '../users/users.controller';
+
+
 const router = express.Router();
 
 
@@ -58,6 +61,24 @@ router.route('/register')
         });
     })
     .post(accounts.signup);
+
+router.route('/user-info/:id')
+    .get(userCtrl.load, (req, res, next) => {
+        const user = req.resources.user;
+
+        return res.format({
+            html: () => {
+                res.render('user/info', { user: user });
+            },
+
+            json: () => {
+                res.send({
+                    user: user,
+                    info: 'Success loading user'
+                });
+            }
+        });
+    });
 
     });
 
