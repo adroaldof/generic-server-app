@@ -60,6 +60,47 @@ UserSchema.statics = {
     },
 
 
+    /**
+     * Authenticate a user
+     *
+     * @apiParam {String} email User email
+     * @apiParam {String} password User password
+     * @apiParam {Function} callback Callback function
+     */
+    authenticate (email, password, callback) {
+        this.findOne({ email: email})
+            .select('+password +passwordSalt')
+            .exec((err, user) => {
+                if (err) {
+                    return callback(err);
+                }
+
+                // Case no user return an empty user
+                if (!user) {
+                    return callback(err, user);
+                }
+
+                // Verify password with existing hash from user
+                passwordHelper.verify(password, user.password, user.passwordSalt, (err, result) => {
+                    if (err) {
+                        return callback(err, null);
+                    }
+
+                    // If password does not match don't return use
+                    if (result === false) {
+                        return callback(err, null);
+                    }
+
+                    // Remove password and salt from result
+                    user.password = undefined;
+                    user.passwordSalt = undefined;
+
+                    callback(err, user);
+                });
+            });
+    },
+
+
      * Retrieve an user information
      *
      * @apiParam {ObjectId} id The ObjectId referent to user identification

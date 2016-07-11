@@ -2,6 +2,7 @@ import express from 'express';
 
 
 import accounts from '../accounts/accounts.controller';
+import authCtrl from '../auth/auth.controller';
 const router = express.Router();
 
 
@@ -24,8 +25,21 @@ router.route('/')
 
 router.route('/login')
     .get((req, res, next) => {
-        res.render('login', {});
-    });
+        return res.format({
+            html: () => {
+                res.render('auth/login', {});
+            },
+
+            json: () => {
+                res.send({
+                    method: 'GET',
+                    path: '/login',
+                    info: 'Success'
+                });
+            }
+        });
+    })
+    .post(authCtrl.signin);
 
 router.route('/register')
     .get((req, res) => {
@@ -47,10 +61,11 @@ router.route('/register')
 
     });
 
-router.route('/logout')
-    .get((req, res, next) => {
-        res.render('index', {});
     });
+
+
+router.route('/logout')
+    .get(authCtrl.signout);
 
 
 /**
