@@ -10,9 +10,9 @@ import passwordHelper from '../../helpers/password';
 const UserSchema = new mongoose.Schema({
     name: {type: String},
     email: {type: String, required: true, unique: true},
+    mobileNumber: {type: String},
     password: {type: String, required: true, select: false},
-    passwordSalt: {type: String, required: true, select: false},
-    mobileNumber: {type: String}
+    passwordSalt: {type: String, required: true, select: false}
 }, {
     timestamps: true
 });
@@ -38,6 +38,12 @@ UserSchema.statics = {
         const self = this;
         const data = _.cloneDeep(opts);
 
+        if (!data.password) {
+            const err = new APIError('Password must be supplied', httpStatus.NOT_FOUND);
+
+            return callback(err, null);
+        }
+
         passwordHelper.hashPassword(opts.password, (err, hashedPassword, salt) => {
             if (err) {
                 return callback(err);
@@ -46,7 +52,7 @@ UserSchema.statics = {
             data.password = hashedPassword;
             data.passwordSalt = salt;
 
-            self.model('User').create(data, (err, user) => {
+            self.create(data, (err, user) => {
                 if (err) {
                     return callback(err, null);
                 }
@@ -160,18 +166,19 @@ UserSchema.statics = {
      * @apiParam {ObjectId} id The ObjectId referent to user identification
      * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
      */
-    get (id) {
+    get (id, callback) {
         const err = new APIError('No such user found!', httpStatus.NOT_FOUND);
 
-        return this.findById(id).execAsync()
+        this.findById({ _id: id })
+            .execAsync()
             .then((user) => {
                 if (user) {
-                    return user;
+                    return callback(null, user);
                 }
 
-                return Promise.reject(err);
+                return callback(err, null);
             }, (err) => {
-                return Promise.reject(err);
+                return callback(err, null);
             });
     },
 
