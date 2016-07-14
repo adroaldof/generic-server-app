@@ -14,7 +14,8 @@ const router = express.Router();
  */
 router.route('/')
     .get(userCtrl.list)
-    .post(validate(validator.createUser), userCtrl.create);
+    .post(userCtrl.create);
+
 
 /**
  * Route to an spacific user
@@ -22,12 +23,20 @@ router.route('/')
  * {GET/PUT/DELETE} /api/users/:userId
  */
 router.route('/:userId')
-    .get(userCtrl.load)
-    .put(validate(validator.updateUser), userCtrl.update)
-    .delete(userCtrl.remove);
+    .get(userCtrl.get)
+    .put(userCtrl.load, userCtrl.update)
+    .delete(userCtrl.load, userCtrl.remove);
+
+/**
+ * Route to an spacific user
+ *
+ * {PUT} /api/users/:userId/change-password
+ */
+router.route('/:userId/change-password')
+    .put(userCtrl.load, userCtrl.changePassword);
 
 // Load user when API with userId route parameter is hit
-router.param('userId', userCtrl.load);
+// router.param('userId', userCtrl.load);
 
 export default router;
 

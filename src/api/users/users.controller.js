@@ -15,16 +15,16 @@ import _ from 'lodash';
  * @apiError {Object} error Error message
  */
 function create (req, res, next) {
-    const userData = {
-        name: req.body.name,
-        email: req.body.email,
-        mobileNumber: req.body.mobileNumber,
-        password: req.body.password
-    };
+    const userData = _.pick(req.body, ['name', 'email', 'password', 'mobileNumber']);
 
-    User.register(userData)
-        .then((savedUser) => res.json(savedUser))
-        .error((error) => next(error));
+    User.register(userData, (err, user) => {
+        if (err) {
+            return next(err);
+        }
+
+        res.json(user);
+        next();
+    });
 }
 
 
@@ -51,6 +51,32 @@ function list (req, res, next) {
 
 
 /**
+ * @api {GET} /api/{version}/user/:id Get an user and append to resources on request object
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id ObjectId corresponding to and specific user
+ *
+ * @apiParam (Login) {String} pass Only logged in users can post this.
+ *
+ * @apiSuccess {User} user Returns an user
+ * @apiError {Object} error Error message
+ */
+function get (req, res, next) {
+    const userId = req.params.userId;
+    req.resources = req.resources || {};
+
+    User.get(userId, (err, user) => {
+        if (err) {
+            return next(err);
+        }
+
+        res.json(user);
+    });
+}
+
+
+/**
  * @api {GET} /api/{version}/user/:id Load an user and append to resources on request object
  * @apiName LoadUser
  * @apiGroup User
@@ -63,17 +89,17 @@ function list (req, res, next) {
  * @apiError {Object} error Error message
  */
 function load (req, res, next) {
-    const userId = req.params.id;
+    const userId = req.params.userId;
     req.resources = req.resources || {};
 
-    User.get(userId)
-        .then((user) => {
-            req.resources.user = user;
-            return next();
-        })
-        .error((error) => {
-            next(error);
-        });
+    User.get(userId, (err, user) => {
+        if (err) {
+            return next(err);
+        }
+
+        req.resources.user = user;
+        return next();
+    });
 }
 
 
@@ -90,7 +116,7 @@ function load (req, res, next) {
  * @apiError {Object} error Error message
  */
 function remove (req, res, next) {
-    const user = req.user;
+    const user = req.resources.user;
 
     user.removeAsync()
         .then((deletedUser) => res.json(deletedUser))
@@ -114,14 +140,10 @@ function remove (req, res, next) {
 function update (req, res, next) {
     const user = req.resources.user;
 
-    req.resources = req.resources || {};
     _.assign(user, req.body);
 
     user.saveAsync()
-        .then((updatedUser) => {
-            req.resources.user = updatedUser;
-            return next();
-        })
+        .then((updatedUser) => res.json(updatedUser))
         .error((error) => next(error));
 }
 
@@ -156,5 +178,5 @@ function changePassword (req, res, next) {
 }
 
 
-export default {load, create, update, changePassword, list, remove};
+export default {load, create, get, update, changePassword, list, remove};
 
