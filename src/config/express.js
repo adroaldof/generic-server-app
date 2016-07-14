@@ -63,10 +63,12 @@ function init (app) {
     app.use(passport.session());
     localStrategy(passport);
 
+    /* istanbul ignore next */
     passport.serializeUser((user, done) => {
         done(null, user.id);
     });
 
+    /* istanbul ignore next */
     passport.deserializeUser((id, done) => {
         User.findById(id, (err, user) => {
             done(err, user);

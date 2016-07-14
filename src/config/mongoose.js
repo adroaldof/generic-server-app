@@ -8,6 +8,7 @@ const debug = require('debug')('generic-server-app:index');
 
 function closeConnection () {
     // Close mongoose connection
+    /* istanbul ignore next */
     mongoose.connection.close(() => {
         debug(`Closing connection to Mongo DB ${ config.db }`);
         process.exit(0);
