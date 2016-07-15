@@ -11,7 +11,89 @@ import app from '../../index';
 chai.config.includeStack = true;
 
 describe('Core Tests', () => {
-	describe('GET /api/core', () => {
+
+    describe('GET /api/core', () => {
+        it('should retrieve index page', (done) => {
+            request(app)
+                .get('/api/core')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.body.info).to.equal('Success');
+                    done();
+                });
+        });
+
+
+        it('should retrieve index page HTML mode', (done) => {
+            request(app)
+                .get('/api/core')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.text).to.contains('Welcome');
+                    done();
+                });
+        });
+    });
+
+
+    describe('GET /api/core/login', () => {
+        it('should retrieve login page', (done) => {
+            request(app)
+                .get('/api/core/login')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.body.info).to.equal('Success');
+                    done();
+                });
+        });
+
+
+        it('should retrieve login page HTML mode', (done) => {
+            request(app)
+                .get('/api/core/login')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.text).to.contains('Login');
+                    done();
+                });
+        });
+    });
+
+
+    describe('GET /api/core/register', () => {
+        it('should retrieve register page', (done) => {
+            request(app)
+                .get('/api/core/register')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.body.info).to.equal('Success');
+                    done();
+                });
+        });
+
+
+        it('should retrieve register page HTML mode', (done) => {
+            request(app)
+                .get('/api/core/register')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.text).to.contains('Registration');
+                    done();
+                });
+        });
+    });
+
+
+    // TODO: Implement all other routes tests
+
+
+	describe('GET /api/core/json', () => {
 		it('should return system ok object message', (done) => {
 			request(app)
 				.get('/api/core/json')
@@ -24,7 +106,7 @@ describe('Core Tests', () => {
 		});
 	});
 
-    describe('POST /api/core', () => {
+    describe('POST /api/core/json', () => {
         it('should post system ok object message', (done) => {
             request(app)
                 .post('/api/core/json')
