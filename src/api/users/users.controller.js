@@ -151,7 +151,7 @@ function changePassword (req, res, next) {
         }
 
         req.resources.info = changedInfo;
-        return next();
+        res.send(changedInfo);
     });
 }
 

@@ -143,11 +143,8 @@ describe('User APIs', () => {
                 .get('/api/users')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body).to.be.an('array');
-                    expect(res.body.length).to.be.above(0);
-                    done();
-                }, (err) => {
-                    expect(err).to.be.null;
+                    expect(res.body.success).to.be.true;
+                    expect(res.body.message).to.equal('Password change succefully');
                     done();
                 });
         });
