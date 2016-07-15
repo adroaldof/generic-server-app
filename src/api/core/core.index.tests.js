@@ -14,9 +14,9 @@ describe('Core Tests', () => {
 	describe('GET /api/core', () => {
 		it('should return system ok object message', (done) => {
 			request(app)
-				.get('/api/core')
+				.get('/api/core/json')
 				.expect(httpStatus.OK)
-				.then(res => {
+				.then((res) => {
 					expect(res.body.system).to.equal('OK');
                     expect(res.body.info).to.equal('System is up');
 					done();
@@ -27,7 +27,7 @@ describe('Core Tests', () => {
     describe('POST /api/core', () => {
         it('should post system ok object message', (done) => {
             request(app)
-                .post('/api/core')
+                .post('/api/core/json')
                 .send({
                     info: 'Sent something'
                 })
