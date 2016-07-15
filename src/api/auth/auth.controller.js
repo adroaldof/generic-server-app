@@ -6,11 +6,11 @@ function signin (req, res, next) {
         if (err || !user) {
             return res.format({
                 html: () => {
-                    res.render('index', { error: err || 'Not user found'});
+                    res.render('index', { error: err || 'No user found'});
                 },
 
                 json: () => {
-                    res.send({ error: err || 'Not user found'});
+                    res.send({ error: err || 'No user found'});
                 }
             });
         }
@@ -22,10 +22,7 @@ function signin (req, res, next) {
                 },
 
                 json: () => {
-                    res.send({
-                        user: user,
-                        info: info
-                    });
+                    res.send(user);
                 }
             });
         });
@@ -40,7 +37,7 @@ function signout(req, res, next) {
         },
 
         json: () => {
-            res.send({ user: {} });
+            res.send({ info: 'Success logged out' });
         }
     });
 }

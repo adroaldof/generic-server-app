@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 
-// import authRoutes from './auth/auth.index';
+import authRoutes from '../api/auth/auth.index';
 import coreRoutes from '../api/core/core.index';
 import userRoutes from '../api/users/users.index';
 
@@ -11,7 +11,7 @@ function init (app) {
     /**
      * App routes
      */
-    // router.use('/auth', authRoutes);
+    router.use('/auth', authRoutes);
     router.use('/core', coreRoutes);
     router.use('/users', userRoutes);
 
