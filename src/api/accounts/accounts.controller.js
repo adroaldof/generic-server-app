@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 import User from '../users/users.model';
 
-
+// TODO: change this to User crete
+/* istanbul ignore next */
 function signup (req, res, next) {
     // ToDo: Email and passowrd validation
 
