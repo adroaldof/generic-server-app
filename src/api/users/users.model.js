@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import Promise from 'bluebird';
 import _ from 'lodash';
 
-import passwordHelper from '../../helpers/password';
 import APIError from '../../helpers/errors/APIError';
+import passwordHelper from '../../helpers/password/password';
 
 
 const UserSchema = new mongoose.Schema({
