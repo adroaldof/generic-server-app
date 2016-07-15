@@ -2,6 +2,7 @@
  *  Checks if a user is authenticated or not
  *  content negotiation is present
  */
+/* istanbul ignore next */
 function ensureAuthenticated (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
