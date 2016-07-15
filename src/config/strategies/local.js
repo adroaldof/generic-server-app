@@ -11,6 +11,8 @@ function localStrategy (passport) {
         passwordField: 'password'
     };
 
+    // TODO: findout a way to test this
+    /* istanbul ignore next */
     passport.use('local', new LocalStrategy(strategyParams, (email, password, done) => {
         User.authenticate(email, password, (err, user) => {
             if (err) {
