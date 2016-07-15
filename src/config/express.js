@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import path from 'path';
 
-import APIError from '../helpers/APIError';
+import APIError from '../helpers/errors/APIError';
 import config from './env';
 import { default as routes } from './routes';
 import winstonInstance from './winston';
