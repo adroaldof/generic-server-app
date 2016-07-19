@@ -146,13 +146,19 @@ function remove (req, res, next) {
  * @apiError {Object} error Error message
  */
 function update (req, res, next) {
-    const user = req.resources.user;
+    const user = req.resources.data.user;
 
     _.assign(user, req.body);
 
     user.saveAsync()
-        .then((updatedUser) => res.json(updatedUser))
-        .error((error) => next(error));
+        .then((updateUser) => {
+            req.resources.data.user = updateUser
+            return next();
+        })
+        .error((err) => {
+            req.resources.data = { err: err };
+            return next();
+        });
 }
 
 
