@@ -14,44 +14,8 @@ router.route('/')
     .get(response.load({ info: 'Success getting index' }, 'index'), response.send);
 
 router.route('/login')
-    .get((req, res, next) => {
-        return res.format({
-            html: () => {
-                res.render('auth/login', {});
-            },
-
-            json: () => {
-                res.send({
-                    method: 'GET',
-                    path: '/login',
-                    info: 'Success'
-                });
-            }
-        });
-    })
-    .post(authCtrl.signin);
-
-router.route('/register')
-    .get((req, res) => {
-        return res.format({
-            html: () => {
-                res.render('auth/register', {});
-            },
-
-            json: () => {
-                res.send({
-                    method: 'GET',
-                    path: '/register',
-                    info: 'Success'
-                });
-            }
-        });
-    })
-    .post(accounts.signup);
-
-router.route('/user-info/:id')
-    .get(userCtrl.load, (req, res, next) => {
-        const user = req.resources.user;
+    .get(response.load({ info: 'Success getting login' }, 'auth/login'), response.send)
+    .post(authCtrl.signin, response.send);
 
         return res.format({
             html: () => {
