@@ -14,9 +14,9 @@ import path from 'path';
 
 import APIError from '../helpers/errors/APIError';
 import config from './env';
-import { default as routes } from './routes';
 import winstonInstance from './winston';
 import localStrategy from './strategies/local';
+import { default as routes } from './routes';
 
 
 function init (app) {
