@@ -176,18 +176,20 @@ function update (req, res, next) {
  * @apiError {Object} error Error message
  */
 function changePassword (req, res, next) {
-    const user = req.resources.user;
+    const user = req.resources.data.user;
     const info = req.body;
 
     req.resources = req.resources || {};
 
     User.changePassword(user._id, info.password, info.newPassword, (err, changedInfo) => {
         if (err) {
-            return next(err);
+            req.resources.data = { err: err };
+            return next();
         }
 
         req.resources.info = changedInfo;
-        res.send(changedInfo);
+        req.resources.shoudRedirect = true;
+        return next();
     });
 }
 

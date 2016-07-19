@@ -24,40 +24,9 @@ router.route('/user/:id/update')
     .get(userCtrl.load, response.load({}, 'user/update'), response.send)
     .post(userCtrl.load, userCtrl.update, response.load({}, 'user/info'), response.send);
 
-router.route('/user-password/:id')
-    .get(userCtrl.load, (req, res, next) => {
-        const user = req.resources.user;
-
-        return res.format({
-            html: () => {
-                res.render('user/change-password', { user: user });
-            },
-
-            json: () => {
-                res.send({
-                    user: user,
-                    info: 'Success loading user'
-                });
-            }
-        });
-    })
-    .post(userCtrl.load, userCtrl.changePassword, (req, res, next) => {
-        const user = req.resources.user || {};
-
-        return res.format({
-            html: () => {
-                res.render('user/info', { user: user });
-            },
-
-            json: () => {
-                res.send({
-                    user: user,
-                    info: 'Success updating user'
-                });
-            }
-        });
-    });
-
+router.route('/user/:id/password')
+    .get(userCtrl.load, response.load({}, 'user/change-password'), response.send)
+    .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/info'), response.send);
 
 router.route('/logout')
     .get(authCtrl.signout);
