@@ -1,7 +1,11 @@
+import _ from 'lodash';
+
+
 function load (data, page) {
     return function (req, res, next) {
-        req.resources = req.resources || {};
-        req.resources.data = data;
+        req.resources = req.resources || { data: {} };
+
+        _.assign(req.resources.data, data);
         req.resources.page = page || undefined;
 
         next();
