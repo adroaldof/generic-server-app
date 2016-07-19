@@ -11,21 +11,7 @@ const router = express.Router();
 
 
 router.route('/')
-    .get((req, res, next) => {
-        return res.format({
-            html: () => {
-                res.render('index', {});
-            },
-
-            json: () => {
-                res.send({
-                    method: 'GET',
-                    path: '/',
-                    info: 'Success'
-                });
-            }
-        });
-    });
+    .get(response.responseFormatter({ info: 'Success getting index' }, 'index'));
 
 router.route('/login')
     .get((req, res, next) => {
