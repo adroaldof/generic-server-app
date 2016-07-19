@@ -32,6 +32,10 @@ router.route('/user/:id/password')
     .get(userCtrl.load, response.load({}, 'user/change-password'), response.send)
     .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/info'), response.send);
 
+router.route('/user/:id/remove')
+    .get(userCtrl.load, userCtrl.remove, response.load({}, '/api/core'), response.send)
+    .delete(userCtrl.load, userCtrl.remove, response.load({}, '/api/core'), response.send);
+
 router.route('/logout')
     .get(authCtrl.signout);
 

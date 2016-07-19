@@ -134,11 +134,21 @@ function load (req, res, next) {
  * @apiError {Object} error Error message
  */
 function remove (req, res, next) {
-    const user = req.resources.user;
+    const user = req.resources.data.user;
 
     user.removeAsync()
-        .then((deletedUser) => res.json(deletedUser))
-        .error((error) => next(error));
+        .then((removedUser) => {
+            _.unset(req.resources, 'data.user');
+            req.resources.info = 'User removed';
+            req.resources.shouldRedirect = true;
+
+            return next();
+        })
+        .error((err) => {
+            req.resources.data = { err: err };
+
+            return next();
+        });
 }
 
 
