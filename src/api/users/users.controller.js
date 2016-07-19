@@ -89,15 +89,23 @@ function get (req, res, next) {
  * @apiError {Object} error Error message
  */
 function load (req, res, next) {
-    const userId = req.params.userId;
+    const userId = req.params.id;
     req.resources = req.resources || {};
 
     User.get(userId, (err, user) => {
         if (err) {
+            _.assign(req.resources, {
+                data: { err: err }
+            });
+
             return next(err);
         }
 
-        req.resources.user = user;
+        _.assign(req.resources, {
+            data: { user: user },
+            page: 'user/info'
+        });
+
         return next();
     });
 }
