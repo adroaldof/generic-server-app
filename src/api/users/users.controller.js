@@ -16,14 +16,24 @@ import _ from 'lodash';
  */
 function create (req, res, next) {
     const userData = _.pick(req.body, ['name', 'email', 'password', 'mobileNumber']);
+    req.resources = req.resources || { data: {}};
 
     User.register(userData, (err, user) => {
         if (err) {
-            return next(err);
+            req.resources.data = { err: err };
+            return next();
         }
 
-        res.json(user);
-        next();
+        req.logIn(user, (err) => {
+            if (err) {
+                req.resources.data = { err: err };
+                return next();
+            }
+
+            req.resources.data.user = user;
+            req.resources.shoudRedirect = true;
+            return next();
+        });
     });
 }
 

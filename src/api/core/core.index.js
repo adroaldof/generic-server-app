@@ -13,6 +13,10 @@ const router = express.Router();
 router.route('/')
     .get(response.load({ info: 'Success getting index' }, 'index'), response.send);
 
+router.route('/register')
+    .get(response.load({ info: 'Success getting register' }, 'auth/register'), response.send)
+    .post(userCtrl.create, response.load({}, 'user/info'), response.send);
+
 router.route('/login')
     .get(response.load({ info: 'Success getting login' }, 'auth/login'), response.send)
     .post(authCtrl.signin, response.send);
