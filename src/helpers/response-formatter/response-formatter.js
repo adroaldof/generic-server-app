@@ -1,19 +1,35 @@
-function responseFormatter (data, page) {
+function load (data, page) {
     return function (req, res, next) {
-        return res.format({
-            'text/html': () => {
-                res.render(page, data);
-            },
+        req.resources = req.resources || {};
+        req.resources.data = data;
+        req.resources.page = page || undefined;
 
-            'application/json': () => {
-                res.send(data);
-            },
-
-            'default': () => {
-                res.send(406).send('Not Acceptable');
-            }
-        });
+        next();
     }
 }
 
-export default { responseFormatter }
+
+function send (req, res, next) {
+    const resources = req.resources;
+
+    return res.format({
+        'text/html': () => {
+            if (resources && resources.shouldRedirect) {
+                return res.redirect(302, resources.page);
+            }
+
+            return res.render(resources.page, resources.data || resources.error);
+        },
+
+        'application/json': () => {
+            res.send(resources);
+        },
+
+        'default': () => {
+            res.send(406).send('Not Acceptable');
+        }
+    });
+}
+
+
+export default { load, send }
