@@ -17,19 +17,8 @@ router.route('/login')
     .get(response.load({ info: 'Success getting login' }, 'auth/login'), response.send)
     .post(authCtrl.signin, response.send);
 
-        return res.format({
-            html: () => {
-                res.render('user/info', { user: user });
-            },
-
-            json: () => {
-                res.send({
-                    user: user,
-                    info: 'Success loading user'
-                });
-            }
-        });
-    });
+router.route('/user/:id')
+    .get(userCtrl.load, response.send);
 
 router.route('/user-update/:id')
     .get(userCtrl.load, (req, res, next) => {
