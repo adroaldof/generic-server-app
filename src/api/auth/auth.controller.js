@@ -1,30 +1,28 @@
+import _ from 'lodash';
 import passport from 'passport';
 
 
 function signin (req, res, next) {
+    req.resources = req.resources || {};
+
     passport.authenticate('local', { failureRedirect: '/api/core/login' }, (err, user, info) => {
         if (err || !user) {
-            return res.format({
-                html: () => {
-                    res.render('index', { error: err || 'No user found'});
-                },
-
-                json: () => {
-                    res.send({ error: err || 'No user found'});
-                }
+            _.assign(req.resources, {
+                data: { err: err || 'No user found' },
+                page: 'index'
             });
+
+            return next();
         }
 
         req.logIn(user, () => {
-            return res.format({
-                html: () => {
-                    res.redirect('/api/core/user-info/' + user._id);
-                },
-
-                json: () => {
-                    res.send(user);
-                }
+            _.assign(req.resources, {
+                data: { user: user },
+                page: String('/api/core/user-info/').concat(user._id),
+                shouldRedirect: true
             });
+
+            return next();
         });
     })(req, res, next);
 }
