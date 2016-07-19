@@ -18,7 +18,7 @@ function signin (req, res, next) {
         req.logIn(user, () => {
             _.assign(req.resources, {
                 data: { user: user },
-                page: String('/api/core/user-info/').concat(user._id),
+                page: String('/api/core/user/').concat(user._id),
                 shouldRedirect: true
             });
 
