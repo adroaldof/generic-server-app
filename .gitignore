@@ -17,6 +17,7 @@ node_modules/
 dist/
 lib/
 coverage/
+docs/
 
 ###############################################################################
 # Accept these files
