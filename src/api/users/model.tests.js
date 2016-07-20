@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 
 
-import User from './users.model';
+import User from './model';
 
 
 describe('User Model Tests', () => {

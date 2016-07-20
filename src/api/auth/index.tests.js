@@ -6,7 +6,7 @@ import request from 'supertest-as-promised';
 import { expect } from 'chai';
 
 import app from '../../index';
-import User from '../users/users.model';
+import User from '../users/model';
 
 
 chai.config.includeStack = true;

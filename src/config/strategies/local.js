@@ -3,7 +3,7 @@ import LocalStrategy from 'passport-local';
 
 
 // const User = mongoose.model('User');
-import User from '../../api/users/users.model';
+import User from '../../api/users/model';
 
 function localStrategy (passport) {
     const strategyParams = {

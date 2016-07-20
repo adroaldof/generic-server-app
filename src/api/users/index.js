@@ -1,9 +1,9 @@
 import express from 'express';
 import validate from 'express-validation';
 
-import userCtrl from './users.controller';
+import userCtrl from './controller';
 import response from '../../helpers/response-formatter/response-formatter';
-import validator from './users.validator';
+import validator from './validator';
 
 
 const router = express.Router();

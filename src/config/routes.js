@@ -3,7 +3,7 @@ import path from 'path';
 
 import authRoutes from '../api/auth/index';
 import coreRoutes from '../api/core/index';
-import userRoutes from '../api/users/users.index';
+import userRoutes from '../api/users/index';
 
 function init (app) {
     const router = express.Router();

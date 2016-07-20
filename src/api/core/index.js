@@ -3,7 +3,7 @@ import express from 'express';
 
 import authCtrl from '../auth/controller';
 import response from '../../helpers/response-formatter/response-formatter';
-import userCtrl from '../users/users.controller';
+import userCtrl from '../users/controller';
 
 
 const router = express.Router();
