@@ -150,7 +150,7 @@ UserSchema.statics = {
                             if (callback) {
                                 return callback(err, {
                                     success: true,
-                                    message: 'Password change succefully'
+                                    message: 'Password changed successfully'
                                 });
                             }
                         });

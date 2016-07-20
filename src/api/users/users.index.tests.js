@@ -39,12 +39,16 @@ describe('User APIs', () => {
             request(app)
                 .post('/api/users')
                 .send(fullUser)
-                .expect(httpStatus.INTERNAL_SERVER_ERROR)
-                .then((err) => {
-                    const error = JSON.parse(err.error.text);
+                .accept('application/json')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    const answer = res.body.data;
 
-                    expect(err).to.exists;
-                    expect(error.message).to.equal('Internal Server Error');
+                    expect(answer).to.exists;
+                    expect(answer).to.an.object;
+                    expect(answer.err.message).to.equal('User validation failed');
+                    expect(answer.err.name).to.equal('ValidationError');
+
                     done();
                 });
         });
@@ -56,12 +60,15 @@ describe('User APIs', () => {
             request(app)
                 .post('/api/users')
                 .send(fullUser)
-                .expect(httpStatus.NOT_FOUND)
-                .then((err) => {
-                    const error = err.body;
+                .accept('application/json')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    const answer = res.body.data;
 
-                    expect(err).to.exists;
-                    expect(error.message).to.equal('Not Found');
+                    expect(answer).to.exists;
+                    expect(answer).to.an.object;
+                    expect(answer.err.name).to.equal('Error');
+
                     done();
                 });
         });
@@ -76,11 +83,14 @@ describe('User APIs', () => {
             request(app)
                 .post('/api/users')
                 .send(fullUser)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.name).to.equal(fullUser.name);
-                    expect(res.body.email).to.equal(fullUser.email);
-                    expect(res.body.mobileNumber).to.equal(fullUser.mobileNumber);
+                    const answer = res.body.data;
+
+                    expect(answer.user._id).to.exists;
+                    expect(answer.user.email).to.equal(fullUser.email);
+
                     done();
                 });
         });
@@ -90,13 +100,18 @@ describe('User APIs', () => {
             request(app)
                 .post('/api/users')
                 .send(fullUser)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.name).to.equal(fullUser.name);
-                    expect(res.body.email).to.equal(fullUser.email);
-                    expect(res.body.mobileNumber).to.equal(fullUser.mobileNumber);
+                    const answer = res.body.data;
 
-                    savedUser = res.body;
+                    expect(answer.user._id).to.exists;
+                    expect(answer.user.name).to.equal(fullUser.name);
+                    expect(answer.user.email).to.equal(fullUser.email);
+                    expect(answer.user.mobileNumber).to.equal(fullUser.mobileNumber);
+
+                    savedUser = answer.user;
+
                     done();
                 });
         });
@@ -106,12 +121,16 @@ describe('User APIs', () => {
             request(app)
                 .post('/api/users')
                 .send(fullUser)
-                .expect(httpStatus.INTERNAL_SERVER_ERROR)
-                .then((err) => {
-                    const error = err.body;
+                .accept('application/json')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    const answer = res.body.data;
 
-                    expect(err).to.exists;
-                    expect(error.message).to.equal('Internal Server Error');
+                    expect(answer).to.exists;
+                    expect(answer.err.code).to.equal(11000);
+                    expect(answer.err.errmsg).to.contains('duplicate');
+                    expect(answer.err.errmsg).to.contains('email');
+
                     done();
                 });
         });
@@ -123,12 +142,14 @@ describe('User APIs', () => {
         it('should get all users', (done) => {
             request(app)
                 .get(`/api/users`)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    const users = res.body;
+                    const answer = res.body.data;
 
-                    expect(users).to.be.an.object;
-                    expect(users.length).to.be.above(0);
+                    expect(answer.users).to.be.an.object;
+                    expect(answer.users.length).to.be.above(0);
+
                     done();
                 });
         });
@@ -139,11 +160,15 @@ describe('User APIs', () => {
         it('should get user details', (done) => {
             request(app)
                 .get(`/api/users/${ savedUser._id }`)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.name).to.equal(savedUser.name);
-                    expect(res.body.email).to.equal(savedUser.email);
-                    expect(res.body.mobileNumber).to.equal(savedUser.mobileNumber);
+                    const answer = res.body.data;
+
+                    expect(answer.user.name).to.equal(savedUser.name);
+                    expect(answer.user.email).to.equal(savedUser.email);
+                    expect(answer.user.mobileNumber).to.equal(savedUser.mobileNumber);
+
                     done();
                 });
         });
@@ -152,9 +177,13 @@ describe('User APIs', () => {
         it('should report error with message, Not found, when user does not exists', (done) => {
             request(app)
                 .get('/api/users/575e0308f7722f9771aaaaaa')
+                .accept('application/json')
                 .expect(httpStatus.NOT_FOUND)
-                .then((err) => {
-                    expect(err.body.message).to.equal('Not Found');
+                .then((res) => {
+                    const answer = res.body;
+
+                    expect(answer.message).to.equal('Not Found');
+
                     done();
                 });
         });
@@ -163,34 +192,42 @@ describe('User APIs', () => {
         it('should handle mongoose CastError - Cast to an wrong ObjectId', (done) => {
             request(app)
                 .get('/api/users/56z787zzz67fc')
+                .accept('application/json')
                 .expect(httpStatus.INTERNAL_SERVER_ERROR)
-                .then((err) => {
-                    expect(err.body.message).to.equal('Internal Server Error');
+                .then((res) => {
+                    const answer = res.body;
+
+                    expect(answer.message).to.equal('Internal Server Error');
+
                     done();
                 });
         });
     });
 
 
-    describe('PUT /api/users/:userId', () => {
+    describe('PUT /api/users/:userId/update', () => {
         it('should update user details', (done) => {
             savedUser.name = 'John Doe Doe';
 
             request(app)
-                .put(`/api/users/${ savedUser._id }`)
+                .put(`/api/users/${ savedUser._id }/update`)
                 .send(savedUser)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.name).to.equal('John Doe Doe');
-                    expect(res.body.email).to.equal(savedUser.email);
-                    expect(res.body.mobileNumber).to.equal(savedUser.mobileNumber);
+                    const answer = res.body.data;
+
+                    expect(answer.user.name).to.equal('John Doe Doe');
+                    expect(answer.user.email).to.equal(savedUser.email);
+                    expect(answer.user.mobileNumber).to.equal(savedUser.mobileNumber);
+
                     done();
                 });
         });
     });
 
 
-    describe('GET /api/users/:userId/change-password', () => {
+    describe('GET /api/users/:userId/password', () => {
         it('should change user password', (done) => {
             const updateInfo = {
                 password: 'Passw0rd',
@@ -198,11 +235,16 @@ describe('User APIs', () => {
             };
 
             request(app)
-                .put(`/api/users/${ savedUser._id }/change-password`)
+                .put(`/api/users/${ savedUser._id }/password`)
                 .send(updateInfo)
+                .accept('application/json')
+                .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.success).to.be.true;
-                    expect(res.body.message).to.equal('Password change succefully');
+                    const answer = res.body;
+
+                    expect(answer.info.success).to.be.true;
+                    expect(answer.info.message).to.equal('Password changed successfully');
+
                     done();
                 });
         })
@@ -212,12 +254,15 @@ describe('User APIs', () => {
     describe('DELETE /api/users', () => {
         it('should delete an user', (done) => {
             request(app)
-                .delete(`/api/users/${ savedUser._id }`)
+                .delete(`/api/users/${ savedUser._id }/remove`)
+                .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.name).to.equal('John Doe Doe');
-                    expect(res.body.email).to.equal(savedUser.email);
-                    expect(res.body.mobileNumber).to.equal(savedUser.mobileNumber);
+                    const answer = res.body;
+
+                    expect(answer.info.success).to.be.true;
+                    expect(answer.info.message).to.equal('User removed successfully');
+
                     done();
                 });
         });

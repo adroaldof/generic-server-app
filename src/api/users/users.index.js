@@ -2,38 +2,27 @@ import express from 'express';
 import validate from 'express-validation';
 
 import userCtrl from './users.controller';
+import response from '../../helpers/response-formatter/response-formatter';
 import validator from './users.validator';
 
 
 const router = express.Router();
 
-/**
- * Main user route
- *
- * {GET/POST} /api/users
- */
 router.route('/')
-    .get(userCtrl.list)
-    .post(userCtrl.create);
+    .get(userCtrl.list, response.send)
+    .post(userCtrl.create, response.load({}, 'user/info'), response.send);
 
+router.route('/:id')
+    .get(userCtrl.load, response.send);
 
-/**
- * Route to an spacific user
- *
- * {GET/PUT/DELETE} /api/users/:userId
- */
-router.route('/:userId')
-    .get(userCtrl.get)
-    .put(userCtrl.load, userCtrl.update)
-    .delete(userCtrl.load, userCtrl.remove);
+router.route('/:id/update')
+    .put(userCtrl.load, userCtrl.update, response.send);
 
-/**
- * Route to an spacific user
- *
- * {PUT} /api/users/:userId/change-password
- */
-router.route('/:userId/change-password')
-    .put(userCtrl.load, userCtrl.changePassword);
+router.route('/:id/password')
+    .put(userCtrl.load, userCtrl.changePassword, response.send);
+
+router.route('/:id/remove')
+    .delete(userCtrl.load, userCtrl.remove, response.send);
 
 // Load user when API with userId route parameter is hit
 // router.param('userId', userCtrl.load);

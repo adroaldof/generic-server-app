@@ -16,7 +16,7 @@ import _ from 'lodash';
  */
 function create (req, res, next) {
     const userData = _.pick(req.body, ['name', 'email', 'password', 'mobileNumber']);
-    req.resources = req.resources || { data: {}};
+    req.resources = req.resources || { data: {} };
 
     User.register(userData, (err, user) => {
         if (err) {
@@ -52,11 +52,21 @@ function create (req, res, next) {
  * @apiError {Object} error Error message
  */
 function list (req, res, next) {
-    const {limit = 50, skip = 0} = req.query;
+    const { limit = 50, skip = 0 } = req.query;
+    req.resources = req.resources || { data: {} };
 
-    User.list({limit, skip})
-        .then((users) => res.json(users))
-        .error((error) => next(error));
+    User.list({ limit, skip })
+        .then((users) => {
+            req.resources.data = { users: users };
+            req.resources.info = 'Got users list';
+
+            return next();
+        })
+        .error((err) => {
+            req.resources.data = { err: err };
+
+            return next();
+        });
 }
 
 
@@ -74,14 +84,19 @@ function list (req, res, next) {
  */
 function get (req, res, next) {
     const userId = req.params.userId;
-    req.resources = req.resources || {};
+    req.resources = req.resources || { data: {} };
 
     User.get(userId, (err, user) => {
         if (err) {
-            return next(err);
+            req.resources.data = { err: err };
+
+            return next();
         }
 
-        res.json(user);
+        req.resources.data = { users: users };
+        req.resources.info = 'Got users list';
+
+        return next();
     });
 }
 
@@ -139,8 +154,13 @@ function remove (req, res, next) {
     user.removeAsync()
         .then((removedUser) => {
             _.unset(req.resources, 'data.user');
-            req.resources.info = 'User removed';
-            req.resources.shouldRedirect = true;
+            _.assign(req.resources, {
+                info: {
+                    success: true,
+                    message: 'User removed successfully'
+                },
+                shouldRedirect: true
+            });
 
             return next();
         })
