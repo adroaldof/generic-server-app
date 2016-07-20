@@ -47,7 +47,7 @@ Here are some shortcut commands that I use
 
 ## Some References
 
-The follow references were used to build this project. Thank you so much guys +1
+The follow references were used to build this project. Thank you so much guys :+1:
 
 - [Kunal Kapadia - express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api)
 - [Jason Miller - express-es6-rest-api](https://github.com/developit/express-es6-rest-api)
@@ -57,4 +57,6 @@ The follow references were used to build this project. Thank you so much guys +1
 - [Robert Onodi - Node.js authentication](http://blog.robertonodi.me/node-authentication-series-email-and-password/)
 - [Michael Herman - User Authentication With Passport and Express 4](https://github.com/mjhea0/passport-local-express4)
 - [RESTful API User Authentication with Node.js and AngularJS – Part 1/2: Server](https://devdactic.com/restful-api-user-authentication-1/)
+- [Scotch Media - Sending Email with Nodemailer and node-mailer-templates](http://www.scotchmedia.com/tutorials/express/authentication/3/02)
+- [Andrew Kelley - Rapid Development Email Templates with Node.js](http://andrewkelley.me/post/swig-email-templates.html)
 
