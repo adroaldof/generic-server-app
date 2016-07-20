@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 
-import authRoutes from '../api/auth/auth.index';
+import authRoutes from '../api/auth/index';
 import coreRoutes from '../api/core/index';
 import userRoutes from '../api/users/users.index';
 

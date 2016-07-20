@@ -1,6 +1,6 @@
 import express from 'express';
 
-import authController from './auth.controller';
+import authController from './controller';
 import response from '../../helpers/response-formatter/response-formatter';
 
 
