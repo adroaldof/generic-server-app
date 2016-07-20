@@ -1,7 +1,6 @@
 import express from 'express';
 
 
-import accounts from '../accounts/accounts.controller';
 import authCtrl from '../auth/auth.controller';
 import response from '../../helpers/response-formatter/response-formatter';
 import userCtrl from '../users/users.controller';
@@ -37,7 +36,7 @@ router.route('/user/:id/remove')
     .delete(userCtrl.load, userCtrl.remove, response.load({}, '/api/core'), response.send);
 
 router.route('/logout')
-    .get(authCtrl.signout);
+    .get(authCtrl.signout, response.load({}, '/api/core'), response.send)
 
 
 /**
