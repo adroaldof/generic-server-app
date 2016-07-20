@@ -31,8 +31,11 @@ describe('Auth API Tests', () => {
         };
 
         User.register(fullUser, (err, user) => {
+            expect(err).to.not.exists;
+            expect(user).to.exists;
+
             done();
-        })
+        });
     });
 
     describe('POST /api/auth', () => {
@@ -49,11 +52,12 @@ describe('Auth API Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    const user = res.body;
+                    const answer = res.body.data;
 
-                    expect(user.name).to.equal(fullUser.name);
-                    expect(user.email).to.equal(fullUser.email);
-                    expect(user.mobileNumber).to.equal(fullUser.mobileNumber);
+                    expect(answer.user.name).to.equal(fullUser.name);
+                    expect(answer.user.email).to.equal(fullUser.email);
+                    expect(answer.user.mobileNumber).to.equal(fullUser.mobileNumber);
+
                     done();
                 });
         });
@@ -70,7 +74,10 @@ describe('Auth API Tests', () => {
                 .send(credentials)
                 .expect(httpStatus.FOUND)
                 .then((res) => {
-                    expect(res.text).to.contains('user-info');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Redirecting');
+
                     done();
                 });
         });
@@ -89,9 +96,10 @@ describe('Auth API Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    const err = res.body;
+                    const answer = res.body.data;
 
-                    expect(err.error).to.equal('No user found');
+                    expect(answer.err).to.equal('No user found');
+
                     done();
                 });
         });
@@ -107,10 +115,14 @@ describe('Auth API Tests', () => {
                 .post('/api/auth')
                 .send(credentials)
                 .then((res) => {
-                    expect(res.text).to.contains('Welcome');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Welcome');
+
                     done();
                 });
         });
+
 
         it('should not authenticate an user whith wrong email', (done) => {
             const credentials = {
@@ -125,12 +137,14 @@ describe('Auth API Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    const err = res.body;
+                    const answer = res.body.data;
 
-                    expect(err.error).to.equal('No user found');
+                    expect(answer.err).to.equal('No user found');
+
                     done();
                 });
         });
+
 
         it('should not authenticate an user whith wrong email on HTML mode', (done) => {
             const credentials = {
@@ -142,11 +156,15 @@ describe('Auth API Tests', () => {
                 .post('/api/auth')
                 .send(credentials)
                 .then((res) => {
-                    expect(res.text).to.contains('Welcome');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Welcome');
+
                     done();
                 });
         });
     });
+
 
     describe('GET /api/auth', () => {
         it('should lougout an user', (done) => {
@@ -162,12 +180,17 @@ describe('Auth API Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
+                    expect(res).to.exists;
+
                     // Make logout request
                     request(app)
                         .get('/api/auth')
                         .set('Accept', 'application/json')
                         .then((res) => {
-                            expect(res.body.info).to.equal('Success logged out');
+                            const answer = res.body;
+
+                            expect(answer.info).to.equal('Successfully logged out');
+
                             done();
                         });
                 });
@@ -184,11 +207,16 @@ describe('Auth API Tests', () => {
                 .post('/api/auth')
                 .send(credentials)
                 .then((res) => {
+                    expect(res).to.exists;
+
                     // Make logout request
                     request(app)
                         .get('/api/auth')
                         .then((res) => {
-                            expect(res.text).to.contain('Welcome');
+                            const answer = res.text;
+
+                            expect(answer).to.contain('Redirecting');
+
                             done();
                         });
                 });

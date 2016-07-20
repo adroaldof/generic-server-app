@@ -27,17 +27,17 @@ function signin (req, res, next) {
     })(req, res, next);
 }
 
-function signout(req, res, next) {
-    req.logout();
-    return res.format({
-        html: () => {
-            res.render('index', {});
-        },
+function signout (req, res, next) {
+    req.resources = req.resources || {};
 
-        json: () => {
-            res.send({ info: 'Success logged out' });
-        }
+    req.logout();
+
+    _.assign(req.resources, {
+        info: 'Successfully logged out',
+        shouldRedirect: true
     });
+
+    return next();
 }
 
 export default { signin, signout };
