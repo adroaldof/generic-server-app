@@ -16,11 +16,14 @@ describe('Core Tests', () => {
         it('should retrieve index page', (done) => {
             request(app)
                 .get('/api/core')
-                .set('Accept', 'application/json')
+                .accept('application/json')
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.info).to.equal('Success');
+                    const answer = res.body.data;
+
+                    expect(answer.info).to.equal('Successfully got index');
+
                     done();
                 });
         });
@@ -31,7 +34,10 @@ describe('Core Tests', () => {
                 .get('/api/core')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.text).to.contains('Welcome');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Welcome');
+
                     done();
                 });
         });
@@ -46,7 +52,10 @@ describe('Core Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.info).to.equal('Success');
+                    const answer = res.body.data;
+
+                    expect(answer.info).to.equal('Successfully got login');
+
                     done();
                 });
         });
@@ -57,7 +66,10 @@ describe('Core Tests', () => {
                 .get('/api/core/login')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.text).to.contains('Login');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Login');
+
                     done();
                 });
         });
@@ -72,7 +84,10 @@ describe('Core Tests', () => {
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.body.info).to.equal('Success');
+                    const answer = res.body.data;
+
+                    expect(answer.info).to.equal('Successfully got register');
+
                     done();
                 });
         });
@@ -83,7 +98,10 @@ describe('Core Tests', () => {
                 .get('/api/core/register')
                 .expect(httpStatus.OK)
                 .then((res) => {
-                    expect(res.text).to.contains('Registration');
+                    const answer = res.text;
+
+                    expect(answer).to.contains('Registration');
+
                     done();
                 });
         });
