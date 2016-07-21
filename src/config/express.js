@@ -16,6 +16,8 @@ import APIError from '../helpers/errors/APIError';
 import config from './env';
 import winstonInstance from './winston';
 import localStrategy from './strategies/local';
+
+import { default as core } from '../api/core/index';
 import { default as routes } from './routes';
 
 
@@ -75,7 +77,10 @@ function init (app) {
         });
     });
 
-    // Mount all routes on /api path
+    // Mount static files on root
+    app.use('/', core(app));
+
+    // Mount all api routes on /api path
     app.use('/api', routes(app));
 
     // Enable detailed API loggin when environment is development
