@@ -22,8 +22,6 @@ function init (app) {
     router.use('/docs', express.static(path.resolve(app.get('root'), 'docs/api')));
     router.use('/documentation', express.static(path.resolve(app.get('root'), 'docs/doc')));
     router.use('/public', express.static(path.resolve(app.get('root'), 'public')));
-    router.use('/css', express.static(path.resolve(app.get('root'), 'public/css')));
-    router.use('/images', express.static(path.resolve(app.get('root'), 'public/images')));
 
     return router;
 }
