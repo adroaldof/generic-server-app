@@ -1,0 +1,83 @@
+extends ../base
+
+block top
+    .fullscreen.landing.parallax(style='background-image:url("images/i2000x1333desk.jpg");', data-img-width='2000', data-img-height='1333', data-diff='100')
+        .overlay
+            .container
+                .row.large-space
+                    .col-md-12
+                        .logo.wow.fadeInDown
+                            h1.wow.fadeInLeft Welcome #{ user.name || user.email }
+                            .landing-text.wow.fadeInUp
+                            p <span class="highlight">ID</span> #{ user._id }
+                            p This is a sample of user area
+
+block bottom
+    #userInfo
+        .container
+            .row.small-space
+                .col-md-6
+                    .user-info
+                        h3 User Info
+                        p <span class="labels">Id</span> #{ user._id || 'No Id supplied' }
+                        p <span class="labels">Name</span> #{ user.name || 'No name supplied' }
+                        p <span class="labels">Email</span> #{ user.email || 'You should see your email here' }
+                        p <span class="labels">Phone</span> #{ user.mobileNumber || 'No phone supplied' }
+
+                .col-md-6
+                    h3 Update your information
+                    p Here you can find some operations you can do
+                    a(href='#updateInfo')
+                        button.btn.btn-primary Update Info
+                    &nbsp;
+                    a(href='#updatePassword')
+                        button.btn.btn-primary Change Password
+                    &nbsp;
+                    a(href='/user/#{ user._id }/remove', )
+                        button.btn.btn-danger Remove Account
+
+
+    #updateInfo
+        .fullscreen.landing.parallax(style='background-image:url("images/i2000x1333desk.jpg");', data-img-width='2000', data-img-height='1333', data-diff='100')
+            .overlay
+                .container
+                    .row.normal-space
+                        .col-md-5
+                            .signup-header.wow.fadeInUp.signup-form
+                                h3.form-title.text-center Update Info
+                                form(class='form-header', action='/user/#{ user._id }/update', role='form', method='POST', id='signup-form')
+                                    .form-group
+                                        input(class='form-control input-lg', name='name', id='name', type='text', value='#{ user.name || "Your Email" }', placeholder='Your Name', required)
+                                    .form-group
+                                        input(class='form-control input-lg', name='email', id='email', type='email', value='#{ user.email || "You should see your email here" }', placeholder='Your Email', required)
+                                    .form-group
+                                        input(class='form-control input-lg', name='mobileNumber', id='mobileNumber', type='text', value='#{ user.mobileNumber || "No phone supplied" }', placeholder='Your Mobile Phone', required)
+                                    .form-group.last
+                                        input(class='btn btn-warning btn-block btn-lg', type='submit', value='Update Info')
+                                    p
+
+
+                        .col-md-7.wow.slideInRight
+                            img(src='images/i960x600computer.jpg', alt='image', class='img-responsive')
+
+
+    #updatePassword
+        .fullscreen.landing.parallax(style='background-image:url("images/i2000x1333snowboarding.jpg");', data-img-width='2000', data-img-height='1333', data-diff='100')
+            .container
+                .row.normal-space
+                    .col-md-7.wow.slideInRight
+                        img(src='images/i960x600computer.jpg', alt='image', class='img-responsive')
+
+                    .col-md-5
+                        .signup-header.wow.fadeInUp.signup-form
+                            h3.form-title.text-center Update Password
+                            form(class='form-header', action='/user/#{ user._id }/password', role='form', method='POST', id='signup-form')
+                                .form-group
+                                    input(class='form-control input-lg', name='password', id='password', type='password', placeholder='Your actual password', required)
+                                .form-group
+                                    input(class='form-control input-lg', name='newPassword', id='newPassword', type='password', placeholder='Your New Password', required)
+                                .form-group
+                                    input(class='form-control input-lg', name='confirmPassword', id='confirmPassword', type='password', placeholder='Confirm Your New Password', required)
+                                .form-group.last
+                                    input(class='btn btn-warning btn-block btn-lg', type='submit', value='Update Password')
+                                p
