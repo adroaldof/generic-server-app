@@ -47,7 +47,7 @@ describe('Auth API Tests', () => {
 
             request(app)
                 .post('/api/auth')
-                .set('Accept', 'application/json')
+                .accept('application/json')
                 .send(credentials)
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
@@ -63,26 +63,6 @@ describe('Auth API Tests', () => {
         });
 
 
-        it('should authenticate an user on HTML mode', (done) => {
-            const credentials = {
-                email: fullUser.email,
-                password: fullUser.password
-            }
-
-            request(app)
-                .post('/api/auth')
-                .send(credentials)
-                .expect(httpStatus.FOUND)
-                .then((res) => {
-                    const answer = res.text;
-
-                    expect(answer).to.contains('Redirecting');
-
-                    done();
-                });
-        });
-
-
         it('should not authenticate an user whith wrong password', (done) => {
             const credentials = {
                 email: fullUser.email,
@@ -91,7 +71,7 @@ describe('Auth API Tests', () => {
 
             request(app)
                 .post('/api/auth')
-                .set('Accept', 'application/json')
+                .accept('application/json')
                 .send(credentials)
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
@@ -99,25 +79,6 @@ describe('Auth API Tests', () => {
                     const answer = res.body.data;
 
                     expect(answer.err).to.equal('No user found');
-
-                    done();
-                });
-        });
-
-
-        it('should not authenticate an user whith wrong password on HTML mode', (done) => {
-            const credentials = {
-                email: fullUser.email,
-                password: 'password'
-            }
-
-            request(app)
-                .post('/api/auth')
-                .send(credentials)
-                .then((res) => {
-                    const answer = res.text;
-
-                    expect(answer).to.contains('Welcome');
 
                     done();
                 });
@@ -132,7 +93,7 @@ describe('Auth API Tests', () => {
 
             request(app)
                 .post('/api/auth')
-                .set('Accept', 'application/json')
+                .accept('application/json')
                 .send(credentials)
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
@@ -140,25 +101,6 @@ describe('Auth API Tests', () => {
                     const answer = res.body.data;
 
                     expect(answer.err).to.equal('No user found');
-
-                    done();
-                });
-        });
-
-
-        it('should not authenticate an user whith wrong email on HTML mode', (done) => {
-            const credentials = {
-                email: 'jonh@doe.com',
-                password: fullUser.password
-            }
-
-            request(app)
-                .post('/api/auth')
-                .send(credentials)
-                .then((res) => {
-                    const answer = res.text;
-
-                    expect(answer).to.contains('Welcome');
 
                     done();
                 });
@@ -175,7 +117,7 @@ describe('Auth API Tests', () => {
 
             request(app)
                 .post('/api/auth')
-                .set('Accept', 'application/json')
+                .accept('application/json')
                 .send(credentials)
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
@@ -185,7 +127,7 @@ describe('Auth API Tests', () => {
                     // Make logout request
                     request(app)
                         .get('/api/auth')
-                        .set('Accept', 'application/json')
+                        .accept('application/json')
                         .then((res) => {
                             const answer = res.body;
 
@@ -195,32 +137,5 @@ describe('Auth API Tests', () => {
                         });
                 });
         });
-
-
-        it('should lougout an user on HTML mode', (done) => {
-            const credentials = {
-                email: fullUser.email,
-                password: fullUser.password
-            }
-
-            request(app)
-                .post('/api/auth')
-                .send(credentials)
-                .then((res) => {
-                    expect(res).to.exists;
-
-                    // Make logout request
-                    request(app)
-                        .get('/api/auth')
-                        .then((res) => {
-                            const answer = res.text;
-
-                            expect(answer).to.contain('Redirecting');
-
-                            done();
-                        });
-                });
-        });
-    })
-
+    });
 });
