@@ -2,57 +2,113 @@ doctype html
 html(lang='en')
     head
         title='Generic Server App'
-        // link(rel='shortcut icon', href='images/favicon.png')
+        link(rel='shortcut icon', href='images/favicon.png')
         meta(charset='utf-8')
         meta(http-equiv='X-UA-Compatible', content='IE=edge')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
-        // link(rel='stylesheet', href='css/styles.css')
+        meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+        link(rel='stylesheet', href='css/bootstrap.min.css')
+        link(rel='stylesheet', href='css/font-awesome.min.css')
+        link(rel='stylesheet', href='fonts/icon-7-stroke/css/pe-icon-7-stroke.css')
+        link(rel='stylesheet', href='fonts/lato/latofonts.css')
+        link(rel='stylesheet', href='css/animate.min.css')
+        link(rel='stylesheet', href='css/css-index.css')
+        link(rel='stylesheet', href='css/styles.css')
     body
-        .navbar.navbar-default.navbar-static-top
+        #preloader
+        #top
+
+
+        block top
+
+        #menu
+            .nav.navbar-wrapper.navbar-default(role='navigation')
+                .container
+                    .navbar-header
+                        button(type='button', class='navbar-toggle', data-toggle='collapse', data-target='.navbar-backyard')
+                            .sr-only Toggle navigation
+                            .icon-bar
+                            .icon-bar
+                            .icon-bar
+                        a(href='#top')
+                            .navbar-brand.site-name
+                                img(src='images/logo.png')
+
+                    #navbar-scroll.collapse.navbar-collapse.navbar-backyard
+                        ul.nav.navbar-nav.navbar-right
+                            if (!locals.user)
+                                li.active
+                                    a(href='#top') Log In
+                                li
+                                    a(href='#signup') Sign Up
+                                li
+                                    a(href='#touch') Get In Touch
+                                li
+                                    a(href='#tools') Tools
+                                li
+                                    a(href='#contact') Contact
+                                li
+                                    a(href='#social') Social
+                            if (locals.user && locals.user.email)
+                                li
+                                    a(href='#userInfo') User Info
+                                li
+                                    a(href='#updateInfo') Update Info
+                                li
+                                    a(href='#updatePassword') Update Password
+                                li.dropdown
+                                    a(href='#', class='dropdonw-toggle', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                                        | User area
+                                        span.caret
+                                    ul.dropdown-menu
+                                        li
+                                            a(href='#userInfo') My Info
+                                        li
+                                            a(href='#updateInfo') Update Info
+                                        li
+                                            a(href='#updatePassword') Change Password
+                                        li.divider(role='separator')
+                                        li
+                                            a(href='/logout') Logout
+
+        block bottom
+
+
+        #social
             .container
-                .navbar-header
-                    button(class='navbar-toggle collapsed', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
-                        .sr-only Toggle navigation
-                        .icon-bar
-                        .icon-bar
-                        .icon-bar
-                    a(href='/api/core')
-                        .navbar-brand Generic Server App
-                #navbar.collapse.navbar-collapse
-                    ul.nav.navbar-nav
-                        li.active
-                            a(href='/api/core') Home
-                    ul.nav.navbar-nav.navbar-right
-                        if (!locals.user)
+                .col-sm-4.col-sm-offset-4
+                    .social.text-center
+                        ul
                             li
-                                a(href='/api/core/login') Login
-                            li.active
-                                a(href='/api/core/register') Signup
-                        if (locals.user && locals.user.email)
-                            li.dropdown
-                                a(href='$', class='dropdonw-toggle', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                                    | User area
-                                    span.caret
-                                ul.dropdown-menu
-                                    li
-                                        a(href='/api/core/user-info/#{ user._id }') My Info
-                                    li
-                                        a(href='/api/core/user-update/#{ user._id }') Update Info
-                                    li
-                                        a(href='/api/core/user-change-password/#{ user._id }') Change Password
-                                    li.divider(role='separator')
-                                    li
-                                        a(href='/api/core/logout') Logout
+                                a(href='#', class='wow fadeInRight')
+                                    i.fa.fa-twitter
+                            li
+                                a(href='#', class='wow fadeInDown', data-wow-delay='0.2s')
+                                    i.fa.fa-facebook
+                            li
+                                a(href='#', class='wow fadeInUp', data-wow-delay='0.4s')
+                                    i.fa.fa-instagram
+                            li
+                                a(href='#', class='wow fadeInLeft', data-wow-delay='0.2s')
+                                    i.fa.fa-youtube
+                    .text-center.wow.fadeInUp NoCopyRighted&nbsp;
+                        a(href='http://inlabs.co') Inlabs &copy;&nbsp;
+                        | 2016
+                    a(href='#', class='scrollToTop')
+                        i.pe-7s-up-arrow.pe-va
 
-        block content
-            .container
-                .row
-                    .col-md-6.col-xs-12
-                        h1 Welcome to Generic Server App
-                        p Here you can Signup an user
+        #footer
+            .footer.fullscreen.parallax(style='background-image:url("images/i2000x1333snowboarding.jpg");', data-img-width='2000', data-img-height='1334', data-diff='100')
+                .overlay
+                    .container
+                        .row.footer-content
+                            h1 En<span class="highlight">Joy</span>
 
-        script(src='//code.jquery.com/jquery-2.2.4.min.js')
-        script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
-        script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js')
+        script(src='js/jquery.js')
+        script(src='js/bootstrap.min.js')
+        script(src='js/custom.js')
+        script(src='js/jquery.sticky.js')
+        script(src='js/wow.min.js')
+        script(src='js/owl.carousel.min.js')
+        script
+            new WOW().init();
 

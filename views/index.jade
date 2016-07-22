@@ -1,24 +1,124 @@
 extends ./base
 
-block content
-    if (!locals.user)
+block top
+    .fullscreen.landing.parallax(style='background-image:url("images/i2000x1333desk.jpg");', data-img-width='2000', data-img-height='1333', data-diff='100')
+            .overlay
+                .container
+                    .row
+                        .col-md-7
+                            .logo.wow.fadeInDown
+                                a(href='#')
+                                    img(src='images/logo.png', alt='Generic Server App')
+                                h1.wow.fadeInLeft Generic Server Project
+                                .landing-text.wow.fadeInUp
+                                    p This is a Generic Server Project aimed to be a start project for you. Here you can see a front-end part that is only to show you one way of implement frontend and making registration and authentication.
+
+                        .col-md-5
+                            .signup-header.wow.fadeInUp
+                                h3.form-title.text-center Log In
+                                form(class='form-header', action='/login', role='form', method='POST', id='login')
+                                    .form-group
+                                        input(class='form-control input-lg', name='email', id='signin-email', type='email', placeholder='Your Email', required)
+                                    .form-group
+                                        input(class='form-control input-lg', name='password', id='signin-password', type='password', placeholder='Your Password', required)
+                                    .form-group.last
+                                        input(class='btn btn-warning btn-block btn-lg', type='submit', value='Log In')
+                                    p.privacy.text-center We will not share your email
+
+
+block bottom
+    #signup
         .container
             .row
-                .col-xs-12
-                    h1 Welcome
-            .row
-                .col-xs-12
-                    p.lead Click the choice you want
-                    a(href='/api/core/login')
-                        button.btn.btn-primary Login
-                    &nbsp;
-                    a(href='/api/core/register')
-                        button.btn.btn-success Register
-    else
+                .col-md-5
+                    .signup-header.wow.fadeInUp.signup-form
+                        h3.form-title.text-center Sign Up
+                        form(class='form-header', action='/register', role='form', method='POST', id='signup-form')
+                            .form-group
+                                input(class='form-control input-lg', name='email', id='signup-email', type='email', placeholder='Your Email', required)
+                            .form-group
+                                input(class='form-control input-lg', name='password', id='signup-password', type='password', placeholder='Your Password', required)
+                            .form-group.last
+                                input(class='btn btn-warning btn-block btn-lg', type='submit', value='Sign Up')
+                            p.privacy.text-center We will not share your email
+
+                .col-md-7.wow.slideInRight
+                    img(src='images/i960x600computer.jpg', alt='image', class='img-responsive')
+
+    #touch
+        .contact.fullscreen.parallax(style='background-image:url("images/i2000x1333keyboard.jpg");', data-img-width='2000', data-img-height='1334', data-diff='100')
+            .overlay
+                .container
+                    .row.medium-space
+                        .col-md-8.col-md-offset-2.col-sm-12.text-center
+                            h1.wow.fadeInRight Would like to know more?
+                            p.download-text.wow.fadeInLeft We used a bootrap theme to build this front-end part. It's called BackYard. The images were found on Google, if any of these images are not licence free just send an email and we will take it of project. We apologise up front.
+                            .download-cta.wow.fadeInLeft
+                                a(href='#contact', class='btn-secondary') Get in Touch
+
+    #tools
         .container
-            .row
-                .col-xs-12
-                    h1 Oops!
-                    p Can not find user
-                    p You shoud not see this message
+            .text-center
+                h2.wow.fadeInLeft Used Tools
+                .title-line.wow.fadeInUp
+                p.wow.fadeInRight The main target of this project is the back-end. Here you can find some tools used on this project. If you feel that you can contribute to this project we'll be glad to hear from you. Many thanks to projects, articles, posts, Stack Over Flow buddies that even without knowing contributed to this. You guys are awesome.
+            .row.extra-small-space
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/node-js.png', alt='NodeJS', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/express.png', alt='Espress', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/npm.png', alt='NPM', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/babel.png', alt='Babel', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/mocha.png', alt='Mocha', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/gulp.png', alt='Gulp', class='img-responsive')
+            .row.extra-small-space
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/js6.png', alt='JS6 - ES2015', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/github.png', alt='GitHub', class='img-responsive')
+            .row.extra-small-space
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/css3.png', alt='CSS3', class='img-responsive')
+                .col-sm-2
+                    .wow.fadeInUp
+                        img(src='images/jade.png', alt='Jade Template Engine', class='img-responsive')
+
+    #contact
+        .contact.fullscreen.parallax(style='background-image:url("images/i2000x1333computer.jpg");', data-img-width='2000', data-img-height='1334', data-diff='100')
+            .overlay
+                .container
+                    .row.contact-row
+                        .col-sm-5.contact-left.wow.fadeInLeft
+                            h1 <span class="highlight">Get</span> in touch
+                            ul.ul-address
+                                li
+                                    i.pe-7s-phone
+                                    <span>55 48 8421-0776<span>
+                                li
+                                    i.pe-7s-mail
+                                    a(href='mailto:adroaldof@ymail.com') adroaldof@ymail.com
+
+                        .col-sm-7.contact-right.fadeInRight
+                            form(class='form-horizontal', action='#', role='form', method='POST', id='contact-form')
+                                .form-group
+                                    input(class='form-control wow fadeInUp', name='contact-name', id='contact-name', type='text', placeholder='Your name', required)
+                                .form-group
+                                    input(class='form-control wow fadeInUp', name='contact-email', id='contact-email', type='email', placeholder='Your Email', required)
+                                .form-group
+                                    textarea(class='form-control input-message wow fadeInUp', name='contact-message', id='contact-meassage', placeholder='Leave a message', required)
+                                .form-group.last
+                                    input(class='btn btn-success wow fadeInUp', type='submit', value='Say Hello')
 
