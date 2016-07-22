@@ -4,17 +4,61 @@
     padding: 100px 0 70px;
 }
 
+.slim-space { padding: 15px 0; }
+.extra-small-space { padding: 25px 0; }
+.small-space { padding: 50px 0; }
+.medium-space { padding: 100px 0; }
+.normal-space { padding: 125px 0; }
+.large-space { padding: 150px 0; }
+
 #signup .signup-header {
     background-color:#9dd7fb;
+}
+
+.user-info {
+    background-color:#9dd7fb;
+    color: #FFF;
+    padding: 25px;
+    border-radius: 5px;
+}
+
+span.labels {
+    color: #3eb0f7;
+    display: inline-block;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 70px;
+}
+
+
+
+.btn-danger {
+    font-size: 17px;
+    margin: 30px 0 10px;
+    margin-right: 10px;
+    line-height: 20px;
+    height: 50px;
+    border: 2px solid #cb4134;
+    background-color: #cb4134;
+    transition: all 0.4s;
+    color: white;
+    border-radius: 100px;
+}
+
+.btn-primary,
+.btn-danger {
+    padding: 10px 25px;
+}
+
+.btn-danger:hover {
+    color: #cb4134;
+    background: #FFF;
 }
 
 .signup-form {
     margin: 0;
 }
 
-.tools-row {
-    padding: 25px 0;
-}
 
 #footer {
     padding: 120px 0 0;
