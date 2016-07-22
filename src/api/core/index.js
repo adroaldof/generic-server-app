@@ -60,10 +60,11 @@ function init (app) {
     /**
      * Load static files to serve on page
      */
-    router.use('/css', express.static(path.resolve(app.get('root'), 'public/css')));
-    router.use('/fonts', express.static(path.resolve(app.get('root'), 'public/fonts')));
-    router.use('/images', express.static(path.resolve(app.get('root'), 'public/images')));
-    router.use('/js', express.static(path.resolve(app.get('root'), 'public/js')));
+    router.use('/', express.static(path.resolve(app.get('root'), 'public')));
+    router.use('/*/css', express.static(path.resolve(app.get('root'), 'public/css')));
+    router.use('/*/fonts', express.static(path.resolve(app.get('root'), 'public/fonts')));
+    router.use('/*/images', express.static(path.resolve(app.get('root'), 'public/images')));
+    router.use('/*/js', express.static(path.resolve(app.get('root'), 'public/js')));
 
     return router;
 }
