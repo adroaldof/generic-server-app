@@ -14,22 +14,18 @@ function init (app) {
         .get(response.load({ info: 'Successfully got index' }, 'index'), response.send);
 
     router.route('/register')
-        .get(response.load({ info: 'Successfully got register' }, 'auth/register'), response.send)
         .post(userCtrl.create, response.load({}, 'user/info'), response.send);
 
     router.route('/login')
-        .get(response.load({ info: 'Successfully got login' }, 'auth/login'), response.send)
         .post(authCtrl.signin, response.send);
 
     router.route('/user/:id')
         .get(userCtrl.load, response.send);
 
     router.route('/user/:id/update')
-        .get(userCtrl.load, response.load({}, 'user/update'), response.send)
         .post(userCtrl.load, userCtrl.update, response.load({}, 'user/info'), response.send);
 
     router.route('/user/:id/password')
-        .get(userCtrl.load, response.load({}, 'user/change-password'), response.send)
         .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/info'), response.send);
 
     router.route('/user/:id/remove')
