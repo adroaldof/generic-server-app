@@ -14,26 +14,26 @@ function init (app) {
         .get(response.load({ info: 'Successfully got index' }, 'index'), response.send);
 
     router.route('/register')
-        .post(userCtrl.create, response.load({}, 'user/info'), response.send);
+        .post(userCtrl.create, response.load({}, 'user/main'), response.send);
 
     router.route('/login')
         .post(authCtrl.signin, response.send);
 
     router.route('/user/:id')
-        .get(userCtrl.load, response.send);
+        .get(userCtrl.load, response.load({}, 'user/main'), response.send);
 
     router.route('/user/:id/update')
-        .post(userCtrl.load, userCtrl.update, response.load({}, 'user/info'), response.send);
+        .post(userCtrl.load, userCtrl.update, response.load({}, 'user/main'), response.send);
 
     router.route('/user/:id/password')
-        .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/info'), response.send);
+        .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/main'), response.send);
 
     router.route('/user/:id/remove')
-        .get(userCtrl.load, userCtrl.remove, response.load({}, '/api/core'), response.send)
-        .delete(userCtrl.load, userCtrl.remove, response.load({}, '/api/core'), response.send);
+        .get(userCtrl.load, userCtrl.remove, response.load({}, '/'), response.send)
+        .delete(userCtrl.load, userCtrl.remove, response.load({}, '/'), response.send);
 
     router.route('/logout')
-        .get(authCtrl.signout, response.load({}, '/api/core'), response.send)
+        .get(authCtrl.signout, response.load({}, '/'), response.send)
 
 
     /**
