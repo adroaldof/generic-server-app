@@ -1,3 +1,29 @@
+<a name="0.0.3"></a>
+## 0.0.3 (2016-07-22)
+
+* Adapt base jade file to fit BackYard Bootstrap Theme ([40e1b17](https://github.com/adroaldof/generic-app-server/commit/40e1b17))
+* Add bootstrap theme on user area ([da32a82](https://github.com/adroaldof/generic-app-server/commit/da32a82))
+* Add project css files ([158fada](https://github.com/adroaldof/generic-app-server/commit/158fada))
+* Add project fonts ([d29206c](https://github.com/adroaldof/generic-app-server/commit/d29206c))
+* Add project JS files ([c7b4353](https://github.com/adroaldof/generic-app-server/commit/c7b4353))
+* Add static images ([600fa45](https://github.com/adroaldof/generic-app-server/commit/600fa45))
+* change server ports ([fe65842](https://github.com/adroaldof/generic-app-server/commit/fe65842))
+* Fix core module tests ([614e7d1](https://github.com/adroaldof/generic-app-server/commit/614e7d1))
+* Fix index page styles ([d819ff8](https://github.com/adroaldof/generic-app-server/commit/d819ff8))
+* Fix location on auth area ([68cced6](https://github.com/adroaldof/generic-app-server/commit/68cced6))
+* Fix routes on core module to adapt to bootstrap theme ([aeb8367](https://github.com/adroaldof/generic-app-server/commit/aeb8367))
+* Fix some styles ([5ce79b2](https://github.com/adroaldof/generic-app-server/commit/5ce79b2))
+* Make static files relative ([937c5f6](https://github.com/adroaldof/generic-app-server/commit/937c5f6))
+* Move core to be served as static file  ([921c33d](https://github.com/adroaldof/generic-app-server/commit/921c33d))
+* Remove HTML tests on auth module and code fixes ([3ad6cbb](https://github.com/adroaldof/generic-app-server/commit/3ad6cbb))
+* Remove not necessary routes ([2ae7f24](https://github.com/adroaldof/generic-app-server/commit/2ae7f24))
+* Remove old template files ([0b2793b](https://github.com/adroaldof/generic-app-server/commit/0b2793b))
+* Route static files on core index ([d3382ab](https://github.com/adroaldof/generic-app-server/commit/d3382ab))
+* Update index page ([a5ab993](https://github.com/adroaldof/generic-app-server/commit/a5ab993))
+* Update read me file ([1c4e930](https://github.com/adroaldof/generic-app-server/commit/1c4e930))
+
+
+
 <a name="0.0.2"></a>
 ## 0.0.2 (2016-07-20)
 
