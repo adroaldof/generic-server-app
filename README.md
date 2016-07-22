@@ -30,19 +30,31 @@ And you are good to go. Checkout the commands bellow and enjoy :)
 
 Here are some shortcut commands that I use
 
-| Command | Description |
-| :---    | :---        |
-| `npm run serve` | Run local server with live reload on change |
-| `npm run full-serve` | Run test, documentation and start local server with live reload on change |
-| `npm run tests` | Run tests and generate `coverage` directory results |
-| `npm run lint` | Lint JS files (JSHint and JSCS) |
-| `npm run documentate` | Generate documentation and locate at `docs` folder |
-| `npm run clean` | Clean all generated files (`docs`, `dist`) |
-| `npm run pre` | Crete a Git Tag with pre release (E.g. 0.0.0-1) |
-| `npm run patch` | Crete a Git Tag with patch release (E.g. 0.0.1) |
-| `npm run minor` | Crete a Git Tag with minor release (E.g. 0.1.0) |
-| `npm run major` | Crete a Git Tag with major release (E.g. 1.0.0) |
-| `npm run help` | Show help command options |
+| NPM | Gulp | Description |
+| :---                 | :---               | :---
+| `npm run serve`      | `gulp serve`       | Run local server with live reload on change |
+| `npm run full-serve` | `gulp full-serve`  | Run test, documentation and start local server with live reload on change |
+| `npm run tests`      | `gulp test`        | Run tests and generate `coverage` directory results |
+| `npm run lint`       | `gulp lint`        | Lint JS files (JSHint and JSCS) |
+| `npm run documentate`| `gulp documentate` | Generate documentation and locate at `docs` folder |
+| `npm run clean`      | `gulp clean`       | Clean all generated files (`docs`, `dist`) |
+| `npm run pre`        | `gulp pre`         | Crete a Git Tag with pre release (E.g. 0.0.0-1) |
+| `npm run patch`      | `gulp patch`       | Crete a Git Tag with patch release (E.g. 0.0.1) |
+| `npm run minor`      | `gulp minor`       | Crete a Git Tag with minor release (E.g. 0.1.0) |
+| `npm run major`      | `gulp major`       | Crete a Git Tag with major release (E.g. 1.0.0) |
+| `npm run help`       | `gulp help`        | Show help command options |
+
+
+## Local Static Front
+
+If you want to see some front-end there are a sample implementation
+
+```bash
+npm run serve
+```
+
+Go to your browser at location [http://localhost:3000](http://localhost:3000)
+
 
 
 ## Some References
