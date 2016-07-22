@@ -6,16 +6,43 @@ import request from 'supertest-as-promised';
 import { expect } from 'chai';
 
 import app from '../../index';
+import User from '../users/model';
 
 
 chai.config.includeStack = true;
 
 describe('Core Tests', () => {
+    let fullUser = {};
 
-    describe('GET /api/core', () => {
+    function clearUsers (done) {
+        User.remove({}, done);
+    }
+
+    before((done) => clearUsers(done));
+
+    after((done) => clearUsers(done));
+
+    before((done) => {
+        fullUser = {
+            name: 'John Doe',
+            email: 'john-doe@gmail.com',
+            mobileNumber: '4887658765',
+            password: 'Passw0rd'
+        };
+
+        User.register(fullUser, (err, user) => {
+            expect(err).to.not.exists;
+            expect(user).to.exists;
+
+            done();
+        });
+    });
+
+
+    describe('GET /', () => {
         it('should retrieve index page', (done) => {
             request(app)
-                .get('/api/core')
+                .get('/')
                 .accept('application/json')
                 .expect('Content-Type', /json/)
                 .expect(httpStatus.OK)
@@ -29,14 +56,14 @@ describe('Core Tests', () => {
         });
 
 
-        it('should retrieve index page HTML mode', (done) => {
+        it('should retrieve index page', (done) => {
             request(app)
-                .get('/api/core')
+                .get('/')
                 .expect(httpStatus.OK)
                 .then((res) => {
                     const answer = res.text;
 
-                    expect(answer).to.contains('Welcome');
+                    expect(answer).to.contains('Generic');
 
                     done();
                 });
@@ -44,63 +71,64 @@ describe('Core Tests', () => {
     });
 
 
-    describe('GET /api/core/login', () => {
-        it('should retrieve login page', (done) => {
+    describe('POST /login', () => {
+        it('should authenticate an user', (done) => {
+            const credentials = {
+                email: fullUser.email,
+                password: fullUser.password
+            }
+
             request(app)
-                .get('/api/core/login')
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
+                .post('/login')
+                .accept('application/json')
+                .send(credentials)
                 .expect(httpStatus.OK)
+                .then((res) => {
+                    const answer = res.body.data.user;
+
+                    expect(answer.name).to.contains(fullUser.name);
+                    expect(answer.email).to.contains(fullUser.email);
+                    expect(answer.mobileNumber).to.contains(fullUser.mobileNumber);
+
+                    done();
+                });
+        });
+
+
+        it('should not authenticate an user whith wrong password', (done) => {
+            const credentials = {
+                email: fullUser.email,
+                password: 'password'
+            }
+
+            request(app)
+                .post('/login')
+                .accept('application/json')
+                .send(credentials)
                 .then((res) => {
                     const answer = res.body.data;
 
-                    expect(answer.info).to.equal('Successfully got login');
+                    expect(answer.err).to.equal('No user found');
 
                     done();
                 });
         });
 
 
-        it('should retrieve login page HTML mode', (done) => {
+        it('should not authenticate an user whith wrong email', (done) => {
+            const credentials = {
+                email: 'jonh@doe.com',
+                password: fullUser.password
+            }
+
             request(app)
-                .get('/api/core/login')
-                .expect(httpStatus.OK)
-                .then((res) => {
-                    const answer = res.text;
-
-                    expect(answer).to.contains('Login');
-
-                    done();
-                });
-        });
-    });
-
-
-    describe('GET /api/core/register', () => {
-        it('should retrieve register page', (done) => {
-            request(app)
-                .get('/api/core/register')
-                .set('Accept', 'application/json')
-                .expect('Content-Type', /json/)
-                .expect(httpStatus.OK)
+                .post('/login')
+                .accept('application/json')
+                .send(credentials)
                 .then((res) => {
                     const answer = res.body.data;
 
-                    expect(answer.info).to.equal('Successfully got register');
-
-                    done();
-                });
-        });
-
-
-        it('should retrieve register page HTML mode', (done) => {
-            request(app)
-                .get('/api/core/register')
-                .expect(httpStatus.OK)
-                .then((res) => {
-                    const answer = res.text;
-
-                    expect(answer).to.contains('Registration');
+                    expect(answer.err).to.equal('No user found');
 
                     done();
                 });
@@ -108,13 +136,40 @@ describe('Core Tests', () => {
     });
 
 
-    // TODO: Implement all other routes tests
+    describe('GET /logout', () => {
+        it('should lougout an user', (done) => {
+            const credentials = {
+                email: fullUser.email,
+                password: fullUser.password
+            }
+
+            request(app)
+                .post('/login')
+                .accept('application/json')
+                .send(credentials)
+                .then((res) => {
+                    expect(res).to.exists;
+
+                    // Make logout request
+                    request(app)
+                        .get('/logout')
+                        .accept('application/json')
+                        .then((res) => {
+                            const answer = res.body;
+
+                            expect(answer.info).to.equal('Successfully logged out');
+
+                            done();
+                        });
+                });
+        });
+    })
 
 
-	describe('GET /api/core/json', () => {
+	describe('GET /json', () => {
 		it('should return system ok object message', (done) => {
 			request(app)
-				.get('/api/core/json')
+				.get('/json')
 				.expect(httpStatus.OK)
 				.then((res) => {
 					expect(res.body.system).to.equal('OK');
@@ -124,10 +179,10 @@ describe('Core Tests', () => {
 		});
 	});
 
-    describe('POST /api/core/json', () => {
+    describe('POST /json', () => {
         it('should post system ok object message', (done) => {
             request(app)
-                .post('/api/core/json')
+                .post('/json')
                 .send({
                     info: 'Sent something'
                 })
