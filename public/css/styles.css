@@ -1,7 +1,25 @@
-body {
-    background-color: #fff;
+#signup,
+#social,
+#tools {
+    padding: 100px 0 70px;
 }
 
-h1 {
-    color: #2b54f3;
+#signup .signup-header {
+    background-color:#9dd7fb;
+}
+
+.signup-form {
+    margin: 0;
+}
+
+.tools-row {
+    padding: 25px 0;
+}
+
+#footer {
+    padding: 120px 0 0;
+}
+
+.footer-content {
+    padding: 450px;
 }
