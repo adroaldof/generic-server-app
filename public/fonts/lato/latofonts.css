@@ -155,7 +155,7 @@
 }
 
 /* Webfont: Lato-Regular */@font-face {
-    font-family: 'Lato';
+    font-family: 'Lato-Regular';
     src: url('fonts/Lato-Regular.eot'); /* IE9 Compat Modes */
     src: url('fonts/Lato-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
          url('fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
