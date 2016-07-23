@@ -16,7 +16,7 @@ router.route('/:id')
     .get(userCtrl.load, response.send);
 
 router.route('/:id/update')
-    .put(userCtrl.load, userCtrl.update, response.send);
+    .put(validate(validator.updateUser), userCtrl.load, userCtrl.update, response.send);
 
 router.route('/:id/password')
     .put(userCtrl.load, userCtrl.changePassword, response.send);

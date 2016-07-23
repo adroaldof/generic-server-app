@@ -24,10 +24,10 @@ export default {
         body: {
             name: Joi.string().min(4).max(50),
             email: Joi.string().email().required(),
-            mobileNumber: Joi.string().regex(/^[1-9][0-9]{8,15}$/).required()
+            mobileNumber: Joi.string().regex(/^[1-9][0-9]{8,15}$/)
         },
         params: {
-            userId: Joi.string().hex().required()
+            id: Joi.string().hex().required()
         }
     }
 };

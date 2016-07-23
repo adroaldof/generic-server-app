@@ -155,7 +155,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('GET /api/users/:userId', () => {
+    describe('GET /api/users/:id', () => {
         it('should get user details', (done) => {
             request(app)
                 .get(`/api/users/${ savedUser._id }`)
@@ -204,7 +204,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('PUT /api/users/:userId/update', () => {
+    describe('PUT /api/users/:id/update', () => {
         it('should update user details', (done) => {
             savedUser.name = 'John Doe Doe';
 
@@ -226,7 +226,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('GET /api/users/:userId/password', () => {
+    describe('GET /api/users/:id/password', () => {
         it('should change user password', (done) => {
             const updateInfo = {
                 password: 'Passw0rd',
