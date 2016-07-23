@@ -13,12 +13,8 @@ export default {
         }
     },
 
-            mobileNumber: Joi.string().regex(/^[1-9][0-9]{8,15}$/)
-        }
-    },
-
     /**
-     * PUT /api/users/:userId
+     * PUT /api/users/:id/update
      */
     updateUser: {
         body: {
