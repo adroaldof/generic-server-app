@@ -1,3 +1,14 @@
+<a name="0.0.4"></a>
+## 0.0.4 (2016-07-23)
+
+* Add Joi validation on user change password ([51cb69b](https://github.com/adroaldof/generic-app-server/commit/51cb69b))
+* Add user creation validation with Joi ([ca03a97](https://github.com/adroaldof/generic-app-server/commit/ca03a97))
+* Code fixes ([f764ec8](https://github.com/adroaldof/generic-app-server/commit/f764ec8))
+* Fix font-face name ([88be77b](https://github.com/adroaldof/generic-app-server/commit/88be77b))
+* Fix update user info with Joi validation ([c813351](https://github.com/adroaldof/generic-app-server/commit/c813351))
+
+
+
 <a name="0.0.3"></a>
 ## 0.0.3 (2016-07-22)
 
