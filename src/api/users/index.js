@@ -19,7 +19,7 @@ router.route('/:id/update')
     .put(validate(validator.updateUser), userCtrl.load, userCtrl.update, response.send);
 
 router.route('/:id/password')
-    .put(userCtrl.load, userCtrl.changePassword, response.send);
+    .put(validate(validator.changeUserPassword), userCtrl.load, userCtrl.changePassword, response.send);
 
 router.route('/:id/remove')
     .delete(userCtrl.load, userCtrl.remove, response.send);

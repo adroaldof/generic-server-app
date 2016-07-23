@@ -29,5 +29,18 @@ export default {
         params: {
             id: Joi.string().hex().required()
         }
+    },
+
+    /**
+     * PUT /api/users/:id/password
+     */
+    changeUserPassword: {
+        body: {
+            password: Joi.string().required(),
+            newPassword: Joi.string().required()
+        },
+        params: {
+            id: Joi.string().hex().required()
+        }
     }
 };
