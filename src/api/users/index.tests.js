@@ -40,14 +40,13 @@ describe('User APIs', () => {
                 .post('/api/users')
                 .send(fullUser)
                 .accept('application/json')
-                .expect(httpStatus.OK)
+                .expect(httpStatus.BAD_REQUEST)
                 .then((res) => {
-                    const answer = res.body.data;
+                    const answer = res.body;
 
                     expect(answer).to.exists;
                     expect(answer).to.an.object;
-                    expect(answer.err.message).to.equal('User validation failed');
-                    expect(answer.err.name).to.equal('ValidationError');
+                    expect(answer.message).to.equal('"email" is required');
 
                     done();
                 });
@@ -61,13 +60,13 @@ describe('User APIs', () => {
                 .post('/api/users')
                 .send(fullUser)
                 .accept('application/json')
-                .expect(httpStatus.OK)
+                .expect(httpStatus.BAD_REQUEST)
                 .then((res) => {
-                    const answer = res.body.data;
+                    const answer = res.body;
 
                     expect(answer).to.exists;
                     expect(answer).to.an.object;
-                    expect(answer.err.name).to.equal('Error');
+                    expect(answer.message).to.equal('"password" is required');
 
                     done();
                 });

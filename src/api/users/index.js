@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.route('/')
     .get(userCtrl.list, response.send)
-    .post(userCtrl.create, response.load({}, 'user/info'), response.send);
+    .post(validate(validator.createUser), userCtrl.create, response.load({}, 'user/info'), response.send);
 
 router.route('/:id')
     .get(userCtrl.load, response.send);
