@@ -10,16 +10,16 @@ const router = express.Router();
 
 router.route('/')
     .get(userCtrl.list, response.send)
-    .post(userCtrl.create, response.load({}, 'user/info'), response.send);
+    .post(validate(validator.createUser), userCtrl.create, response.load({}, 'user/info'), response.send);
 
 router.route('/:id')
     .get(userCtrl.load, response.send);
 
 router.route('/:id/update')
-    .put(userCtrl.load, userCtrl.update, response.send);
+    .put(validate(validator.updateUser), userCtrl.load, userCtrl.update, response.send);
 
 router.route('/:id/password')
-    .put(userCtrl.load, userCtrl.changePassword, response.send);
+    .put(validate(validator.changeUserPassword), userCtrl.load, userCtrl.changePassword, response.send);
 
 router.route('/:id/remove')
     .delete(userCtrl.load, userCtrl.remove, response.send);

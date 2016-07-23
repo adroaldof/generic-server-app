@@ -40,14 +40,13 @@ describe('User APIs', () => {
                 .post('/api/users')
                 .send(fullUser)
                 .accept('application/json')
-                .expect(httpStatus.OK)
+                .expect(httpStatus.BAD_REQUEST)
                 .then((res) => {
-                    const answer = res.body.data;
+                    const answer = res.body;
 
                     expect(answer).to.exists;
                     expect(answer).to.an.object;
-                    expect(answer.err.message).to.equal('User validation failed');
-                    expect(answer.err.name).to.equal('ValidationError');
+                    expect(answer.message).to.equal('"email" is required');
 
                     done();
                 });
@@ -61,13 +60,13 @@ describe('User APIs', () => {
                 .post('/api/users')
                 .send(fullUser)
                 .accept('application/json')
-                .expect(httpStatus.OK)
+                .expect(httpStatus.BAD_REQUEST)
                 .then((res) => {
-                    const answer = res.body.data;
+                    const answer = res.body;
 
                     expect(answer).to.exists;
                     expect(answer).to.an.object;
-                    expect(answer.err.name).to.equal('Error');
+                    expect(answer.message).to.equal('"password" is required');
 
                     done();
                 });
@@ -156,7 +155,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('GET /api/users/:userId', () => {
+    describe('GET /api/users/:id', () => {
         it('should get user details', (done) => {
             request(app)
                 .get(`/api/users/${ savedUser._id }`)
@@ -205,7 +204,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('PUT /api/users/:userId/update', () => {
+    describe('PUT /api/users/:id/update', () => {
         it('should update user details', (done) => {
             savedUser.name = 'John Doe Doe';
 
@@ -227,7 +226,7 @@ describe('User APIs', () => {
     });
 
 
-    describe('GET /api/users/:userId/password', () => {
+    describe('GET /api/users/:id/password', () => {
         it('should change user password', (done) => {
             const updateInfo = {
                 password: 'Passw0rd',
