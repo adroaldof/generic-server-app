@@ -1,0 +1,21 @@
+{
+	"rules": {
+        "indent": [2, 4, { "SwitchCase": 1 }],
+        "template-curly-spacing": ["error", "always"],
+        "space-before-function-paren": [2, {
+            "anonymous": "always",
+            "named": "always"
+        }],
+        "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+		"no-use-before-define": [2, "nofunc"],
+		"comma-dangle": ["error", "never"]
+	},
+	"env": {
+		"node": true,
+		"mocha": true
+	},
+	"extends": [
+		"eslint:recommended",
+        "airbnb/base"
+	]
+}
