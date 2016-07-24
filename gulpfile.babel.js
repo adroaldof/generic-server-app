@@ -253,7 +253,7 @@ gulp.task('test', ['clean'], () => {
 
 
 /************************************************************************
- * Release
+ * Start server and live reloading
  ************************************************************************/
 
 gulp.task('nodemon', () => {
@@ -282,14 +282,20 @@ gulp.task('nodemon', () => {
  * Release
  ************************************************************************/
 
+const release = argv.type;
+
 function releaseTask (type) {
-    console.log('releaseTask', type);
     gulp.src(paths.configs.package)
         .pipe(plugins.bump({
             type: type
         }))
         .pipe(gulp.dest(paths.dirs.base));
 }
+
+function getPackageJsonVersion () {
+    return JSON.parse(fs.readFileSync(paths.configs.package, 'utf8')).version;
+}
+
 
 gulp.task('pre-release', () => {
     releaseTask('prerelease');
@@ -310,9 +316,7 @@ gulp.task('major-release', () => {
     releaseTask('major');
 });
 
-
 gulp.task('changelog', () => {
-    console.log('changelog');
     return gulp.src(paths.configs.changelog)
     .pipe(plugins.conventionalChangelog())
     .pipe(gulp.dest(paths.dirs.base));
@@ -330,28 +334,18 @@ gulp.task('github-release', (done) => {
 
 
 gulp.task('commit-changes', () => {
-    function getPackageJsonVersion () {
-        return JSON.parse(fs.readFileSync(paths.configs.package, 'utf8')).version;
-    }
-    console.log('commit changes');
-
     return gulp.src('.')
         .pipe(plugins.git.add())
-        .pipe(plugins.git.commit('New tag and bumped ' + argv.type + ' version number v' + getPackageJsonVersion()));
+        .pipe(plugins.git.commit('New tag and bumped ' + releaseType + ' version number v' + getPackageJsonVersion()));
 });
 
 
 gulp.task('push-changes', (cb) => {
-    console.log('push-changes');
     plugins.git.push('origin', 'master', cb);
 });
 
 
 gulp.task('create-new-tag', (cb) => {
-    function getPackageJsonVersion () {
-        return JSON.parse(fs.readFileSync(paths.configs.package, 'utf8')).version;
-    }
-
     const version = getPackageJsonVersion();
 
     plugins.git.tag(String('v').concat(version), 'Created Tag for version: v' + version, (error) => {
@@ -367,8 +361,7 @@ gulp.task('create-new-tag', (cb) => {
 
 gulp.task('release', () => {
     function releaseType () {
-        console.log('type', argv.type);
-        switch (argv.type) {
+        switch (releaseType) {
             case 'pre':
                 return 'pre-release';
             case 'patch':
