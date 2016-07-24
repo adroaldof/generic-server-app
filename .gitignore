@@ -27,5 +27,4 @@ docs/
 !.editorconfig
 !.gitignore
 !.jscsrc
-!.jshintrc
 !.nvmrc
