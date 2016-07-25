@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 
+import APIError from '../errors/APIError';
+import generateToken from '../token/token';
+
 
 const LEN = 256;
 const SALT_LEN = 64;
@@ -18,34 +21,48 @@ const DIGEST = 'sha256';
 function hashPassword (password, salt, callback) {
     const len = LEN / 2;
 
-    if (arguments.length === 3) {
-        crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, (err, derivedKey) => {
-            if (err) {
-                return callback(err);
-            }
-
-            return callback(null, derivedKey.toString('hex'));
-        });
-    } else {
-        // If no salt is supplied get second parameter as callback
-        callback = salt;
-
-        crypto.randomBytes(SALT_LEN / 2, (err, salt) => {
-            if (err) {
-                return callback(err);
-            }
-
-            salt = salt.toString('hex');
-
-            crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, (err, derivedKey) => {
+    if (password && callback && typeof callback === 'function') {
+        return crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST,
+            (err, derivedKey) => {
                 if (err) {
                     return callback(err);
                 }
 
-                callback(null, derivedKey.toString('hex'), salt);
+                return callback(null, derivedKey.toString('hex'));
             });
+    }
+
+    if (password && salt && typeof salt === 'function') {
+        // If no salt is supplied get second parameter as callback
+        const cb = salt;
+
+        return generateToken(SALT_LEN / 2, (err, generatedSalt) => {
+            if (err) {
+                return cb(err);
+            }
+
+            const passwordSalt = generatedSalt.toString('hex');
+
+            return crypto.pbkdf2(password, passwordSalt, ITERATIONS, len, DIGEST,
+                (error, derivedKey) => {
+                    if (error) {
+                        return cb(error);
+                    }
+
+                    return cb(null, derivedKey.toString('hex'), passwordSalt);
+                });
         });
     }
+
+    if (typeof password === 'function') {
+        return password(new APIError('Password as string is necessary as first parameter'), null);
+    }
+
+    if (!password && typeof salt === 'function') {
+        return salt(new APIError('Password as string is necessary'), null);
+    }
+
+    return new APIError('Check parameters: passwordString, [passwordSaltString,] callbackFunction');
 }
 
 /**
@@ -58,17 +75,16 @@ function hashPassword (password, salt, callback) {
  * @apiparam {Function} callback
  */
 function verify (toCheckPassword, userHashPassword, userPasswordSalt, cb) {
-    hashPassword(toCheckPassword, userPasswordSalt, (err, hashedPassword) => {
+    return hashPassword(toCheckPassword, userPasswordSalt, (err, hashedPassword) => {
         if (err) {
             return cb(err);
         }
 
         if (hashedPassword === userHashPassword) {
-            cb(null, true);
-        } else {
-            cb(null, false);
+            return cb(null, true);
         }
 
+        return cb(null, false);
     });
 }
 
