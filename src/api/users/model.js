@@ -1,6 +1,5 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
-import Promise from 'bluebird';
 import _ from 'lodash';
 
 import APIError from '../../helpers/errors/APIError';
@@ -8,14 +7,15 @@ import passwordHelper from '../../helpers/password/password';
 
 
 const UserSchema = new mongoose.Schema({
-    name: {type: String},
-    email: {type: String, required: true, unique: true},
-    mobileNumber: {type: String},
-    password: {type: String, required: true, select: false},
-    passwordSalt: {type: String, required: true, select: false}
+    name: { type: String },
+    email: { type: String, required: true, unique: true },
+    mobileNumber: { type: String },
+    password: { type: String, required: true, select: false },
+    passwordSalt: { type: String, required: true, select: false }
 }, {
     timestamps: true
 });
+
 
 /**
  * Improve User
@@ -44,23 +44,24 @@ UserSchema.statics = {
             return callback(err, null);
         }
 
-        passwordHelper.hashPassword(opts.password, (err, hashedPassword, salt) => {
-            if (err) {
-                return callback(err);
+        return passwordHelper.hashPassword(opts.password, (error, hashedPassword, salt) => {
+            if (error) {
+                return callback(error);
             }
 
             data.password = hashedPassword;
             data.passwordSalt = salt;
 
-            self.create(data, (err, user) => {
+            return self.create(data, (err, user) => {
                 if (err) {
                     return callback(err, null);
                 }
+                const savedUser = user;
 
-                user.password = undefined;
-                user.passwordSalt = undefined;
+                savedUser.password = undefined;
+                savedUser.passwordSalt = undefined;
 
-                callback(err, user);
+                return callback(err, savedUser);
             });
         });
     },
@@ -74,7 +75,9 @@ UserSchema.statics = {
      * @apiParam {Function} callback Callback function
      */
     authenticate (email, password, callback) {
-        this.findOne({ email: email})
+        const self = this;
+
+        return self.findOne({ email })
             .select('+password +passwordSalt')
             .exec((err, user) => {
                 if (err) {
@@ -86,23 +89,26 @@ UserSchema.statics = {
                     return callback(err, user);
                 }
 
+                const authenticatedUser = user;
+
                 // Verify password with existing hash from user
-                passwordHelper.verify(password, user.password, user.passwordSalt, (err, result) => {
-                    if (err) {
-                        return callback(err, null);
-                    }
+                return passwordHelper.verify(password, user.password, user.passwordSalt,
+                    (error, result) => {
+                        if (error) {
+                            return callback(err, null);
+                        }
 
-                    // If password does not match don't return use
-                    if (result === false) {
-                        return callback(err, null);
-                    }
+                        // If password does not match don't return use
+                        if (result === false) {
+                            return callback(err, null);
+                        }
 
-                    // Remove password and salt from result
-                    user.password = undefined;
-                    user.passwordSalt = undefined;
+                        // Remove password and salt from result
+                        authenticatedUser.password = undefined;
+                        authenticatedUser.passwordSalt = undefined;
 
-                    callback(err, user);
-                });
+                        return callback(err, authenticatedUser);
+                    });
             });
     },
 
@@ -116,7 +122,7 @@ UserSchema.statics = {
     changePassword (id, oldPassword, newPassword, callback) {
         const self = this;
 
-        self.findById({ _id: id })
+        return self.findById({ _id: id })
             .select('+password +passwordSalt')
             .exec((err, user) => {
                 if (err) {
@@ -127,35 +133,38 @@ UserSchema.statics = {
                     return callback(err, user);
                 }
 
-                passwordHelper.verify(oldPassword, user.password, user.passwordSalt, (err, result) => {
-                    if (err) {
-                        return callback(err, null);
-                    }
+                const anUser = user;
 
-                    if (!result) {
-                        const PassNoMatchError = new Error('Old password does not match');
-                        PassNoMatchError.type = 'old_password_does_not_match';
-                        return callback(PassNoMatchError, null);
-                    }
+                return passwordHelper.verify(oldPassword, anUser.password, anUser.passwordSalt,
+                    (err, result) => { // eslint-disable-line no-shadow
+                        if (err) {
+                            return callback(err, null);
+                        }
 
-                    passwordHelper.hashPassword(newPassword, (err, hashedPassword, salt) => {
-                        user.password = hashedPassword;
-                        user.passwordSalt = salt;
+                        if (!result) {
+                            const PassNoMatchError = new Error('Old password does not match');
+                            PassNoMatchError.type = 'old_password_does_not_match';
 
-                        user.save((err) => {
-                            if (err) {
-                                return callback(err, null);
-                            }
+                            return callback(PassNoMatchError, null);
+                        }
 
-                            if (callback) {
-                                return callback(err, {
-                                    success: true,
-                                    message: 'Password changed successfully'
+                        return passwordHelper.hashPassword(newPassword,
+                            (err, hashedPass, salt) => { // eslint-disable-line no-shadow
+                                anUser.password = hashedPass;
+                                anUser.passwordSalt = salt;
+
+                                return anUser.save((err) => { // eslint-disable-line no-shadow
+                                    if (err) {
+                                        return callback(err, null);
+                                    }
+
+                                    return callback(err, {
+                                        success: true,
+                                        message: 'Password changed successfully'
+                                    });
                                 });
-                            }
-                        });
+                            });
                     });
-                });
             });
     },
 
@@ -167,19 +176,18 @@ UserSchema.statics = {
      * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
      */
     get (id, callback) {
-        const err = new APIError('No such user found!', httpStatus.NOT_FOUND);
+        const notFound = new APIError('No such user found!', httpStatus.NOT_FOUND);
 
-        this.findById({ _id: id })
+        return this.findById({ _id: id })
             .execAsync()
             .then((user) => {
-                if (user) {
-                    return callback(null, user);
+                if (!user) {
+                    return callback(notFound, null);
                 }
 
-                return callback(err, null);
-            }, (err) => {
-                return callback(err, null);
-            });
+                return callback(null, user);
+            })
+            .catch(err => callback(err, null));
     },
 
 
@@ -190,9 +198,9 @@ UserSchema.statics = {
      * @apiParam {Number} limit Limit number or users to be returned
      * @apiSuccess {Promise<User[]>} Returns an array of users objects
      */
-    list ({skip = 0, limit = 50} = {}) {
+    list ({ skip = 0, limit = 50 } = {}) {
         return this.find()
-            .sort({createdAt: -1})
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .execAsync();
