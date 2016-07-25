@@ -1,19 +1,20 @@
+/* eslint-disable no-param-reassign */
 import _ from 'lodash';
 
 
 function load (data, page) {
-    return function (req, res, next) {
+    return function loadRequest (req, res, next) {
         req.resources = req.resources || { data: {} };
 
         _.assign(req.resources.data, data);
         req.resources.page = page || undefined;
 
         next();
-    }
+    };
 }
 
 
-function send (req, res, next) {
+function send (req, res, next) { // eslint-disable-line no-unused-vars
     const resources = req.resources;
 
     return res.format({
@@ -29,11 +30,11 @@ function send (req, res, next) {
             res.send(resources);
         },
 
-        'default': () => {
+        default: () => {
             res.send(406).send('Not Acceptable');
         }
     });
 }
 
 
-export default { load, send }
+export default { load, send };
