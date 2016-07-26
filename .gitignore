@@ -28,5 +28,4 @@ docs/
 !.eslintignore
 !.eslintrc
 !.gitignore
-!.jscsrc
 !.nvmrc
