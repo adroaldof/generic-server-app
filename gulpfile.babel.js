@@ -412,8 +412,7 @@ gulp.task('build', [
 
 
 gulp.task('lint', [
-    'jshint',
-    'jscs'
+    'eslint'
 ]);
 
 
