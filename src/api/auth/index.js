@@ -4,7 +4,7 @@ import authController from './controller';
 import response from '../../helpers/response-formatter/response-formatter';
 
 
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line new-cap
 
 router.route('/')
     .get(authController.signout, response.load({}, '/'), response.send)

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import _ from 'lodash';
 import passport from 'passport';
 
@@ -15,10 +17,11 @@ function signin (req, res, next) {
             return next();
         }
 
-        req.logIn(user, () => {
+        return req.logIn(user, () => {
             _.assign(req.resources, {
-                data: { user: user },
-                page: String('/user/').concat(user._id),
+                data: { user },
+                info,
+                page: String('/user/').concat(user._id), // eslint-disable-line no-underscore-dangle
                 shouldRedirect: true
             });
 
