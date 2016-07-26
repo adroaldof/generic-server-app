@@ -1,6 +1,5 @@
-/* globals describe, it */
+/* eslint-disable no-unused-expressions, max-len */
 
-import chai from 'chai';
 import httpStatus from 'http-status';
 import request from 'supertest-as-promised';
 import { expect } from 'chai';
@@ -8,8 +7,6 @@ import { expect } from 'chai';
 import app from '../../index';
 import User from '../users/model';
 
-
-chai.config.includeStack = true;
 
 describe('Core Tests', () => {
     let fullUser = {};
@@ -76,7 +73,7 @@ describe('Core Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/login')
@@ -99,7 +96,7 @@ describe('Core Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: 'password'
-            }
+            };
 
             request(app)
                 .post('/login')
@@ -119,7 +116,7 @@ describe('Core Tests', () => {
             const credentials = {
                 email: 'jonh@doe.com',
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/login')
@@ -141,7 +138,7 @@ describe('Core Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/login')
@@ -154,7 +151,7 @@ describe('Core Tests', () => {
                     request(app)
                         .get('/logout')
                         .accept('application/json')
-                        .then((res) => {
+                        .then((res) => { // eslint-disable-line no-shadow
                             const answer = res.body;
 
                             expect(answer.info).to.equal('Successfully logged out');
@@ -163,21 +160,22 @@ describe('Core Tests', () => {
                         });
                 });
         });
-    })
+    });
 
 
-	describe('GET /json', () => {
-		it('should return system ok object message', (done) => {
-			request(app)
-				.get('/json')
-				.expect(httpStatus.OK)
-				.then((res) => {
-					expect(res.body.system).to.equal('OK');
+    describe('GET /json', () => {
+        it('should return system ok object message', (done) => {
+            request(app)
+                .get('/json')
+                .expect(httpStatus.OK)
+                .then((res) => {
+                    expect(res.body.system).to.equal('OK');
                     expect(res.body.info).to.equal('System is up');
-					done();
-				});
-		});
-	});
+                    done();
+                });
+        });
+    });
+
 
     describe('POST /json', () => {
         it('should post system ok object message', (done) => {
@@ -196,16 +194,15 @@ describe('Core Tests', () => {
     });
 
 
-	describe('GET /api/404', () => {
-		it('should return 404 status', (done) => {
-			request(app)
-				.get('/api/unknown')
-				.expect(httpStatus.NOT_FOUND)
-				.then(res => {
-					expect(res.body.message).to.equal('Not Found');
-					done();
-				});
-		});
-	});
-
+    describe('GET /api/404', () => {
+        it('should return 404 status', (done) => {
+            request(app)
+                .get('/api/unknown')
+                .expect(httpStatus.NOT_FOUND)
+                .then(res => {
+                    expect(res.body.message).to.equal('Not Found');
+                    done();
+                });
+        });
+    });
 });
