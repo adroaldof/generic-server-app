@@ -24,7 +24,7 @@ import { default as routes } from './routes';
 function init (app) {
     // import MongoStore from 'connect-mongo';
     const User = mongoose.model('User');
-    const MongoStore = require('connect-mongo')(session);
+    const MongoStore = require('connect-mongo')(session); // eslint-disable-line global-require
     const sessionOpts = {
         secret: config.session.secret,
         key: 'skey.sid',
@@ -93,7 +93,8 @@ function init (app) {
         app.use(expressWinston.logger({
             winstonInstance,
             meta: true,
-            msg: 'HTTP {{ req.method }} {{ req.url }} {{ res.statusCode }} {{ res.responseTime }}ms',
+            msg: String('HTTP {{ req.method }} {{ req.url }} {{ res.statusCode }}')
+                .concat(' {{ res.responseTime }}ms'),
             colorsStatus: true
         }));
     }
@@ -110,19 +111,20 @@ function init (app) {
     /* istanbul ignore next */
     app.use((err, req, res, next) => {
         if (err instanceof expressValidation.ValidationError) {
-            const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
+            const unifiedErrorMessage = err.errors.map(error => error.messages.join('. '))
+                .join(' and ');
             const error = new APIError(unifiedErrorMessage, err.status, true);
 
             return next(error);
-        } else
+        }
 
-            if (!(err instanceof APIError)) {
-                const apiError = new APIError(err.message, err.status, err.isPublic);
+        if (!(err instanceof APIError)) {
+            const apiError = new APIError(err.message, err.status, err.isPublic);
 
-                return next(apiError);
-            }
+            return next(apiError);
+        }
 
-            return next(err);
+        return next(err);
     });
 
     // Catch 404 and forward to error handler
@@ -133,15 +135,13 @@ function init (app) {
     });
 
     // Error handler, send stacktrace only during development
-    /* jscs: disable */
-    app.use((err, req, res, next) => {
+    app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
         res.status(err.status)
             .json({
                 message: (err.isPublic) ? err.message : httpStatus[err.status],
                 stack: (config.env === 'dev') ? err.stack : {}
             });
     });
-    /* jscs: enable */
 }
 
 
