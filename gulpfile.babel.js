@@ -132,7 +132,7 @@ gulp.task('apidoc', (done) => {
 
 
 /************************************************************************
- * Linters (jshint, jscs)
+ * Linters
  ************************************************************************/
 
 gulp.task('eslint', () => {
@@ -140,13 +140,6 @@ gulp.task('eslint', () => {
         .pipe(plugins.eslint())
         .pipe(plugins.eslint.format())
         .pipe(plugins.eslint.failAfterError())
-});
-
-
-gulp.task('jscs', () => {
-    return gulp.src(paths.jslint)
-        .pipe(plugins.jscs(paths.configs.jscsrc))
-        .pipe(plugins.jshint.reporter('jscs-stylish'));
 });
 
 
