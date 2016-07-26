@@ -1,3 +1,5 @@
+[![Codeship Status for adroaldof/generic-server-app](https://www.codeship.io/projects/810993d0-34ff-0134-9930-761d96654ee5/status?branch=master)](https://www.codeship.io/projects/165138)
+
 # Generic Server
 
 This project is a generic server sample.
