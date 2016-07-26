@@ -6,7 +6,7 @@ import coreRoutes from '../api/core/index';
 import userRoutes from '../api/users/index';
 
 function init (app) {
-    const router = express.Router();
+    const router = express.Router(); // eslint-disable-line new-cap
 
     /**
      * App routes

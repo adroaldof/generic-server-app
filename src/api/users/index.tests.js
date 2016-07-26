@@ -1,6 +1,5 @@
-/* globals describe, it */
+/* eslint-disable no-unused-expressions */
 
-import chai from 'chai';
 import httpStatus from 'http-status';
 import request from 'supertest-as-promised';
 import { expect } from 'chai';
@@ -8,8 +7,6 @@ import { expect } from 'chai';
 import app from '../../index';
 import User from './model';
 
-
-chai.config.includeStack = true;
 
 describe('User APIs', () => {
     let fullUser = {};
@@ -87,7 +84,7 @@ describe('User APIs', () => {
                 .then((res) => {
                     const answer = res.body.data;
 
-                    expect(answer.user._id).to.exists;
+                    expect(answer.user.id).to.exists;
                     expect(answer.user.email).to.equal(fullUser.email);
 
                     done();
@@ -104,12 +101,13 @@ describe('User APIs', () => {
                 .then((res) => {
                     const answer = res.body.data;
 
-                    expect(answer.user._id).to.exists;
+                    expect(answer.user.id).to.exists;
                     expect(answer.user.name).to.equal(fullUser.name);
                     expect(answer.user.email).to.equal(fullUser.email);
                     expect(answer.user.mobileNumber).to.equal(fullUser.mobileNumber);
 
                     savedUser = answer.user;
+                    savedUser.id = answer.user._id; // eslint-disable-line no-underscore-dangle
 
                     done();
                 });
@@ -133,14 +131,13 @@ describe('User APIs', () => {
                     done();
                 });
         });
-
     });
 
 
-    describe('GET /api/users',  () => {
+    describe('GET /api/users', () => {
         it('should get all users', (done) => {
             request(app)
-                .get(`/api/users`)
+                .get('/api/users')
                 .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
@@ -158,7 +155,7 @@ describe('User APIs', () => {
     describe('GET /api/users/:id', () => {
         it('should get user details', (done) => {
             request(app)
-                .get(`/api/users/${ savedUser._id }`)
+                .get(`/api/users/${ savedUser.id }`)
                 .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {
@@ -209,7 +206,7 @@ describe('User APIs', () => {
             savedUser.name = 'John Doe Doe';
 
             request(app)
-                .put(`/api/users/${ savedUser._id }/update`)
+                .put(`/api/users/${ savedUser.id }/update`)
                 .send(savedUser)
                 .accept('application/json')
                 .expect(httpStatus.OK)
@@ -234,7 +231,7 @@ describe('User APIs', () => {
             };
 
             request(app)
-                .put(`/api/users/${ savedUser._id }/password`)
+                .put(`/api/users/${ savedUser.id }/password`)
                 .send(updateInfo)
                 .accept('application/json')
                 .expect(httpStatus.OK)
@@ -246,14 +243,14 @@ describe('User APIs', () => {
 
                     done();
                 });
-        })
+        });
     });
 
 
     describe('DELETE /api/users', () => {
         it('should delete an user', (done) => {
             request(app)
-                .delete(`/api/users/${ savedUser._id }/remove`)
+                .delete(`/api/users/${ savedUser.id }/remove`)
                 .accept('application/json')
                 .expect(httpStatus.OK)
                 .then((res) => {

@@ -1,6 +1,5 @@
-/* globals describe, it */
+/* eslint-disable no-unused-expressions, max-len */
 
-import chai from 'chai';
 import httpStatus from 'http-status';
 import request from 'supertest-as-promised';
 import { expect } from 'chai';
@@ -8,8 +7,6 @@ import { expect } from 'chai';
 import app from '../../index';
 import User from '../users/model';
 
-
-chai.config.includeStack = true;
 
 describe('Auth API Tests', () => {
     let fullUser = {};
@@ -43,7 +40,7 @@ describe('Auth API Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/api/auth')
@@ -67,7 +64,7 @@ describe('Auth API Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: 'password'
-            }
+            };
 
             request(app)
                 .post('/api/auth')
@@ -89,7 +86,7 @@ describe('Auth API Tests', () => {
             const credentials = {
                 email: 'jonh@doe.com',
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/api/auth')
@@ -113,7 +110,7 @@ describe('Auth API Tests', () => {
             const credentials = {
                 email: fullUser.email,
                 password: fullUser.password
-            }
+            };
 
             request(app)
                 .post('/api/auth')
@@ -128,7 +125,7 @@ describe('Auth API Tests', () => {
                     request(app)
                         .get('/api/auth')
                         .accept('application/json')
-                        .then((res) => {
+                        .then((res) => { // eslint-disable-line no-shadow
                             const answer = res.body;
 
                             expect(answer.info).to.equal('Successfully logged out');

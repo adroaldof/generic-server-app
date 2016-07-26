@@ -8,7 +8,7 @@ import userCtrl from '../users/controller';
 
 
 function init (app) {
-    const router = express.Router();
+    const router = express.Router(); // eslint-disable-line new-cap
 
     router.route('/')
         .get(response.load({ info: 'Successfully got index' }, 'index'), response.send);
@@ -26,14 +26,16 @@ function init (app) {
         .post(userCtrl.load, userCtrl.update, response.load({}, 'user/main'), response.send);
 
     router.route('/user/:id/password')
-        .post(userCtrl.load, userCtrl.changePassword, response.load({}, 'user/main'), response.send);
+        .post(
+            userCtrl.load, userCtrl.changePassword, response.load({}, 'user/main'), response.send
+        );
 
     router.route('/user/:id/remove')
         .get(userCtrl.load, userCtrl.remove, response.load({}, '/'), response.send)
         .delete(userCtrl.load, userCtrl.remove, response.load({}, '/'), response.send);
 
     router.route('/logout')
-        .get(authCtrl.signout, response.load({}, '/'), response.send)
+        .get(authCtrl.signout, response.load({}, '/'), response.send);
 
 
     /**

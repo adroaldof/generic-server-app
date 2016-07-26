@@ -19,6 +19,7 @@ class ExtendableError extends Error {
 
         this.name = this.constructor.name;
         this.message = message;
+        this.info = message;
         this.status = status;
         this.isPublic = isPublic;
         this.isOperational = true; // Bluebird 4 does't append it anymore

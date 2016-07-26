@@ -25,7 +25,7 @@ docs/
 
 !.babelrc
 !.editorconfig
+!.eslintignore
+!.eslintrc
 !.gitignore
-!.jscsrc
-!.jshintrc
 !.nvmrc

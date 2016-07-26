@@ -8,7 +8,7 @@ function ensureAuthenticated (req, res, next) {
         return next();
     }
 
-    res.format({
+    return res.format({
         html: () => {
             res.redirect('/core/signin');
         },

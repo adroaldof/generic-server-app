@@ -1,5 +1,4 @@
-import chai from 'chai';
-import crypto from 'crypto';
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 
 import generateToken from './token';
@@ -22,7 +21,7 @@ describe('Token Tests', () => {
 
 
     it('should generate a token with a function', (done) => {
-        generateToken((err, token) => {
+        generateToken(null, (err, token) => {
             if (err) {
                 expect(err).to.not.exists;
                 done();
