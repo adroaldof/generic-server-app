@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-    env: 'prod',
+    env: 'production',
     db: process.env.MONGODB_URI || 'mongodb://localhost/generic-server-app-prod',
     port: 3000,
     session: {

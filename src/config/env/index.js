@@ -2,7 +2,7 @@ import _ from 'lodash';
 import path from 'path';
 
 
-const env = process.env.NODE_ENV || 'dev';
+const env = process.env.NODE_ENV || 'development';
 const config = require(`./${ env }`);
 const defaults = {
     root: path.join(__dirname, '/..'),

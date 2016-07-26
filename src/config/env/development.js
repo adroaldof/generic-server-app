@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default {
-    env: 'dev',
+    env: 'development',
     db: process.env.MONGODB_URI_DEV || 'mongodb://localhost/generic-server-app-dev',
     port: 3000,
     session: {
