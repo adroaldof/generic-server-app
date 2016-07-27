@@ -118,7 +118,7 @@ function load (req, res, next) {
     const userId = req.params.id;
     req.resources = req.resources || {};
 
-    User.get(userId, (err, user) => {
+    return User.get(userId, (err, user) => {
         if (err) {
             _.assign(req.resources, {
                 data: { err }
