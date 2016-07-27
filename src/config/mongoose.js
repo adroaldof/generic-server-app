@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Promise from 'bluebird';
 
-import config from './env';
+import config from './env/index';
 
 
 const debug = require('debug')('generic-server-app:index');

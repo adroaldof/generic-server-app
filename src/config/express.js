@@ -13,7 +13,7 @@ import passport from 'passport';
 import path from 'path';
 
 import APIError from '../helpers/errors/APIError';
-import config from './env';
+import config from './env/index';
 import winstonInstance from './winston';
 import localStrategy from './strategies/local';
 
@@ -85,7 +85,7 @@ function init (app) {
 
     // Enable detailed API loggin when environment is development
     /* istanbul ignore next */
-    if (config.env === 'dev') {
+    if (config.env === 'development') {
         expressWinston.requestWhitelist.push('body');
         expressWinston.responseWhitelist.push('body');
 
@@ -139,7 +139,7 @@ function init (app) {
         res.status(err.status)
             .json({
                 message: (err.isPublic) ? err.message : httpStatus[err.status],
-                stack: (config.env === 'dev') ? err.stack : {}
+                stack: (config.env === 'development') ? err.stack : {}
             });
     });
 }
