@@ -10,7 +10,7 @@
   },
   "scripts": {
     "postinstall": "gulp transpile",
-    "start": "gulp serve",
+    "start": "node lib/index.js",
     "serve": "gulp serve",
     "full-serve": "gulp full-serve",
     "test": "gulp test",
