@@ -8,7 +8,6 @@ import { default as initModels } from './config/models';
 import { default as initExpress } from './config/express';
 
 
-const ENV = process.env.NODE_ENV || 'development';
 const app = express();
 const debug = require('debug')('generic-server-app:index');
 
@@ -16,7 +15,7 @@ const debug = require('debug')('generic-server-app:index');
  * Set express app variables
  */
 app.set('root', path.resolve(__dirname, '..'));
-app.set('env', ENV);
+app.set('env', config.env);
 app.set('config', config);
 
 
