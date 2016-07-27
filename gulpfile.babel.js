@@ -42,12 +42,12 @@ const paths = {
                   '!./lib/**/*',
                   '!./node_modules/**/*',
                   '!./coverage/**/*',
-                  '!gulpfile.babel.js'
+                  '!./gulpfile.babel.js'
               ],
               tests: './src/**/*.tests.js'
           },
           jslint: [
-              './gulpfile.js',
+              './gulpfile.babel.js',
               './src/**/*.js',
               '!./lib/**/*.js'
           ]
@@ -265,7 +265,7 @@ gulp.task('nodemon', () => {
         ignore: [
             'node_module/',
             'lib/',
-            'gulpfile.babe.js'
+            'gulpfile.babel.js'
         ],
         tasks: ['transpile']
     });
