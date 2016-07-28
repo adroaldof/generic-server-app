@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import _ from 'lodash';
 
+// TODO: Find a way to test this module
 
+/* istanbul ignore next */
 function load (data, page) {
     return function loadRequest (req, res, next) {
         req.resources = req.resources || { data: {} };
@@ -13,8 +15,8 @@ function load (data, page) {
     };
 }
 
-
-function send (req, res, next) { // eslint-disable-line no-unused-vars
+/* istanbul ignore next */
+function send (req, res) {
     const resources = req.resources;
 
     return res.format({
