@@ -1,0 +1,18 @@
+codecov:
+    branch: master
+    ci:
+        - "codeship.com/projects/165138"
+
+coverage:
+    precision: 2
+    round: down
+    range: "70...100"
+
+    status:
+        project:
+            default:
+                target: auto
+
+comment:
+    layout: "header, diff, changes, sunburst, uncovered, tree"
+    behavior: default
