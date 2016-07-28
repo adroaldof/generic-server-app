@@ -1,5 +1,4 @@
-// 'use strict';
-
+/* eslint-disable spaced-comment, max-len */
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
@@ -15,63 +14,63 @@ const plugins = gulpLoadPlugins();
 const releaser = require('conventional-github-releaser');
 
 const paths = {
-          configs: {
-              changelog: './CHANGELOG.md',
-              gitignore: './.gitignore',
-              jscsrc: './.jscsrc',
-              jshintrc: './.jshintrc',
-              package: './package.json'
-          },
-          dirs: {
-              base: './',
-              coverage: './coverage',
-              lib: './lib',
-              docs: {
-                  base: './docs',
-                  doc: './docs/doc',
-                  api: './docs/api'
-              },
-              public: './public',
-              src: './src',
-              views: './views'
-          },
-          files: {
-              js: [
-                  './src/**/*.js',
-                  '!./src/**/*.tests.js',
-                  '!./lib/**/*',
-                  '!./node_modules/**/*',
-                  '!./coverage/**/*',
-                  '!./gulpfile.babel.js'
-              ],
-              tests: './src/**/*.tests.js'
-          },
-          jslint: [
-              './gulpfile.babel.js',
-              './src/**/*.js',
-              '!./lib/**/*.js'
-          ]
-      };
+    configs: {
+        changelog: './CHANGELOG.md',
+        gitignore: './.gitignore',
+        jscsrc: './.jscsrc',
+        jshintrc: './.jshintrc',
+        package: './package.json'
+    },
+    dirs: {
+        base: './',
+        coverage: './coverage',
+        lib: './lib',
+        docs: {
+            base: './docs',
+            doc: './docs/doc',
+            api: './docs/api'
+        },
+        public: './public',
+        src: './src',
+        views: './views'
+    },
+    files: {
+        js: [
+            './src/**/*.js',
+            '!./src/**/*.tests.js',
+            '!./lib/**/*',
+            '!./node_modules/**/*',
+            '!./coverage/**/*',
+            '!./gulpfile.babel.js'
+        ],
+        tests: './src/**/*.tests.js'
+    },
+    jslint: [
+        './gulpfile.babel.js',
+        './src/**/*.js',
+        '!./lib/**/*.js'
+    ]
+};
 
 const options = {
-          codeCoverage: {
-              reporters: ['lcov', 'text-summary'],
-              thresholds: {
-                  global: {
-                      statements: 80,
-                      branches: 80,
-                      functions: 80,
-                      lines: 80,
-                  },
-                  each: {
-                      statements: 50,
-                      branches: 50,
-                      functions: 50,
-                      lines: 50,
-                  }
-              }
-          }
-      };
+    codeCoverage: {
+        reporters: ['lcov', 'text-summary'],
+        thresholds: {
+            global: {
+                statements: 80,
+                branches: 80,
+                functions: 80,
+                lines: 80
+            },
+            each: {
+                statements: 50,
+                branches: 50,
+                functions: 50,
+                lines: 50
+            }
+        }
+    }
+};
 
 
 /************************************************************************
@@ -113,18 +112,18 @@ gulp.task('copy', () => {
  * Documentation
  ************************************************************************/
 
-gulp.task('document', () => {
-    return gulp.src(paths.dirs.src)
-        .pipe(plugins.esdoc({destination: paths.dirs.docs.doc}));
-});
+gulp.task('document', () => gulp
+    .src(paths.dirs.src)
+    .pipe(plugins.esdoc({ destination: paths.dirs.docs.doc }))
+);
 
 
 gulp.task('apidoc', (done) => {
-    const options = {
+    const options = { // eslint-disable-line no-shadow
         src: paths.dirs.src,
         dest: paths.dirs.docs.api,
         verbose: true,
-        includeFilters: [ ".*\\.js$" ]
+        includeFilters: ['.*\\.js$']
     };
 
     plugins.apidoc(options, done);
@@ -139,7 +138,7 @@ gulp.task('eslint', () => {
     gulp.src(paths.jslint)
         .pipe(plugins.eslint())
         .pipe(plugins.eslint.format())
-        .pipe(plugins.eslint.failAfterError())
+        .pipe(plugins.eslint.failAfterError());
 });
 
 
@@ -147,19 +146,19 @@ gulp.task('eslint', () => {
  * Transpiler
  ************************************************************************/
 
-gulp.task('transpile', () => {
-    return gulp.src(paths.files.js, {base: paths.dirs.src})
-        .pipe(plugins.newer(paths.dirs.lib))
-        .pipe(plugins.sourcemaps.init())
-        .pipe(plugins.babel())
-        .pipe(plugins.sourcemaps.write('.', {
-            includeContent: false,
-            sourceRoot (file) {
-                return path.relative(file.path, __dirname);
-            }
-        }))
-        .pipe(gulp.dest(paths.dirs.lib));
-});
+gulp.task('transpile', () => gulp
+    .src(paths.files.js, { base: paths.dirs.src })
+    .pipe(plugins.newer(paths.dirs.lib))
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.babel())
+    .pipe(plugins.sourcemaps.write('.', {
+        includeContent: false,
+        sourceRoot (file) {
+            return path.relative(file.path, __dirname);
+        }
+    }))
+    .pipe(gulp.dest(paths.dirs.lib))
+);
 
 
 /************************************************************************
@@ -168,6 +167,8 @@ gulp.task('transpile', () => {
 
 /**
  * Set node environment variable to test
+ },
+ "devDependencies": {
  */
 gulp.task('set-env', () => {
     plugins.env({
@@ -181,14 +182,14 @@ gulp.task('set-env', () => {
 /**
  * Convert files to code coverage
  */
-gulp.task('pre-test', () => {
-    return gulp.src([...paths.files.js])
-        .pipe(plugins.istanbul({
-            instrumenter: isparta.Instrumenter,
-            includeUntested: true
-        }))
-        .pipe(plugins.istanbul.hookRequire());
-});
+gulp.task('pre-test', () => gulp
+    .src([...paths.files.js])
+    .pipe(plugins.istanbul({
+        instrumenter: isparta.Instrumenter,
+        includeUntested: true
+    }))
+    .pipe(plugins.istanbul.hookRequire())
+);
 
 
 /**
@@ -216,6 +217,10 @@ gulp.task('run-test', ['pre-test', 'set-env'], () => {
             timeout: 6000,
             compilers: { js: babelCompiler }
         }))
+        .once('error', (err) => {
+            plugins.util.log(err);
+            exitCode = 1;
+        })
         .pipe(plugins.istanbul.writeReports({
             dir: paths.dirs.coverage,
             reporters
@@ -223,10 +228,6 @@ gulp.task('run-test', ['pre-test', 'set-env'], () => {
         .pipe(plugins.istanbul.enforceThresholds({
             thresholds: options.codeCoverage.thresholds
         }))
-        .once('error', (err) => {
-            plugins.util.log(err);
-            exitCode = 1;
-        })
         .once('end', () => {
             plugins.util.log('*** Tests Completed ***');
             process.exit(exitCode);
@@ -276,13 +277,11 @@ gulp.task('nodemon', () => {
  * Release
  ************************************************************************/
 
-const release = argv.type;
+const releaseTypeName = argv.type;
 
 function releaseTask (type) {
     gulp.src(paths.configs.package)
-        .pipe(plugins.bump({
-            type: type
-        }))
+        .pipe(plugins.bump({ type }))
         .pipe(gulp.dest(paths.dirs.base));
 }
 
@@ -310,11 +309,11 @@ gulp.task('major-release', () => {
     releaseTask('major');
 });
 
-gulp.task('changelog', () => {
-    return gulp.src(paths.configs.changelog)
+gulp.task('changelog', () => gulp
+    .src(paths.configs.changelog)
     .pipe(plugins.conventionalChangelog())
-    .pipe(gulp.dest(paths.dirs.base));
-});
+    .pipe(gulp.dest(paths.dirs.base))
+);
 
 
 gulp.task('github-release', (done) => {
@@ -327,11 +326,16 @@ gulp.task('github-release', (done) => {
 });
 
 
-gulp.task('commit-changes', () => {
-    return gulp.src('.')
-        .pipe(plugins.git.add())
-        .pipe(plugins.git.commit('New tag and bumped ' + releaseType + ' version number v' + getPackageJsonVersion()));
-});
+gulp.task('commit-changes', () => gulp
+    .src('.')
+    .pipe(plugins.git.add())
+    .pipe(plugins.git.commit(
+        String('New tag and bumped ')
+            .concat(releaseTypeName)
+            .concat(' version number v')
+            .concat(getPackageJsonVersion()))
+    )
+);
 
 
 gulp.task('push-changes', (cb) => {
@@ -340,22 +344,25 @@ gulp.task('push-changes', (cb) => {
 
 
 gulp.task('create-new-tag', (cb) => {
-    const version = getPackageJsonVersion();
+    const tagData = {
+        tag: String('v').concat(getPackageJsonVersion()),
+        message: String('Created Tag for version: v').concat(getPackageJsonVersion())
+    };
 
-    plugins.git.tag(String('v').concat(version), 'Created Tag for version: v' + version, (error) => {
+    return plugins.git.tag(tagData.tag, tagData.message, (error) => {
         if (error) {
             return cb(error);
         }
-        console.log('tag version ' + version);
 
-        plugins.git.push('origin', 'master', {args: '--tags'}, cb);
+        plugins.util.log(String('tag version ').concat(tagData.tag));
+        return plugins.git.push('origin', 'master', { args: '--tags' }, cb);
     });
 });
 
 
 gulp.task('release', () => {
     function releaseType () {
-        switch (releaseType) {
+        switch (releaseTypeName) {
             case 'pre':
                 return 'pre-release';
             case 'patch':
@@ -365,21 +372,10 @@ gulp.task('release', () => {
             case 'major':
                 return 'major-release';
             default:
-                console.log('You can choose release type among "pre|patch|minor|major"');
-                console.log('Using now "patch"');
+                plugins.util.log('You can choose release type among "pre|patch|minor|major"');
+                plugins.util.log('Using now "patch"');
                 return 'patch-release';
         }
-    }
-
-
-    function callBack (error) {
-        if (error) {
-            console.log(error.message);
-        } else {
-            console.log('RELEASE FINISHED SUCCESSFULLY');
-        }
-
-        return false;
     }
 
 
@@ -389,8 +385,7 @@ gulp.task('release', () => {
         'commit-changes',
         'push-changes',
         'create-new-tag',
-        'github-release',
-        callBack
+        'github-release'
     );
 });
 
