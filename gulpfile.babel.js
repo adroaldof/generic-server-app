@@ -198,6 +198,7 @@ gulp.task('pre-test', () => gulp
 gulp.task('run-test', ['pre-test', 'set-env'], () => {
     let reporters;
     let exitCode = 0;
+    const coverageVariable = String('$$cov_').concat(new Date().getTime()).concat('$$');
 
     if (plugins.util.env['code-coverage-reporter']) {
         reporters = [
@@ -208,7 +209,7 @@ gulp.task('run-test', ['pre-test', 'set-env'], () => {
         reporters = options.codeCoverage.reporters;
     }
 
-    return gulp.src([paths.files.tests], { read: false })
+    gulp.src([paths.files.tests], { read: false })
         .pipe(plugins.plumber())
         .pipe(plugins.mocha({
             reporter: plugins.util.env['mocha-reporter'] || 'spec',
@@ -217,17 +218,18 @@ gulp.task('run-test', ['pre-test', 'set-env'], () => {
             timeout: 6000,
             compilers: { js: babelCompiler }
         }))
-        .once('error', (err) => {
-            plugins.util.log(err);
-            exitCode = 1;
-        })
         .pipe(plugins.istanbul.writeReports({
             dir: paths.dirs.coverage,
             reporters
         }))
         .pipe(plugins.istanbul.enforceThresholds({
-            thresholds: options.codeCoverage.thresholds
+            thresholds: options.codeCoverage.thresholds,
+            coverageVariable
         }))
+        .once('error', (err) => {
+            plugins.util.log(err);
+            exitCode = 1;
+        })
         .once('end', () => {
             plugins.util.log('*** Tests Completed ***');
             process.exit(exitCode);
@@ -361,8 +363,8 @@ gulp.task('create-new-tag', (cb) => {
 
 
 gulp.task('release', () => {
-    function releaseType (releaseTypeName) {
-        switch (releaseTypeName) {
+    function releaseType (type) {
+        switch (type) {
             case 'pre':
                 return 'pre-release';
             case 'patch':
@@ -380,11 +382,9 @@ gulp.task('release', () => {
 
     function callback (err) {
         if (err) {
-            plugin.util.log('--- Error ---');
             return plugins.util.log(err.message);
         }
 
-        plugin.util.log('--- OK ---');
         return plugins.util.log('RELEASE FINISHED SUCCESSFULLY');
     }
 
