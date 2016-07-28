@@ -361,7 +361,7 @@ gulp.task('create-new-tag', (cb) => {
 
 
 gulp.task('release', () => {
-    function releaseType () {
+    function releaseType (releaseTypeName) {
         switch (releaseTypeName) {
             case 'pre':
                 return 'pre-release';
@@ -380,7 +380,7 @@ gulp.task('release', () => {
 
 
     runSequence(
-        releaseType(),
+        releaseType(releaseTypeName),
         'changelog',
         'commit-changes',
         'push-changes',
