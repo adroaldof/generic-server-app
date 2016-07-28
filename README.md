@@ -1,4 +1,4 @@
-[![Codeship Status for adroaldof/generic-server-app](https://www.codeship.io/projects/810993d0-34ff-0134-9930-761d96654ee5/status?branch=master)](https://www.codeship.io/projects/165138)
+[![Codeship Status for adroaldof/generic-server-app](https://img.shields.io/codeship/810993d0-34ff-0134-9930-761d96654ee5/master.svg?style=flat-square)](https://www.codeship.io/projects/165138)
 [![Dependency Status](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43)
 
 # Generic Server
