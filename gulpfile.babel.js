@@ -4,7 +4,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
 import babelCompiler from 'babel-core/register';
 import * as isparta from 'isparta';
-import argv from 'yargs';
+import args from 'yargs';
 import del from 'del';
 import fs from 'graceful-fs';
 import runSequence from 'run-sequence';
@@ -277,7 +277,7 @@ gulp.task('nodemon', () => {
  * Release
  ************************************************************************/
 
-const releaseTypeName = argv.type;
+const releaseTypeName = args.argv.type;
 
 function releaseTask (type) {
     gulp.src(paths.configs.package)
@@ -378,6 +378,16 @@ gulp.task('release', () => {
         }
     }
 
+    function callback (err) {
+        if (err) {
+            plugin.util.log('--- Error ---');
+            return plugins.util.log(err.message);
+        }
+
+        plugin.util.log('--- OK ---');
+        return plugins.util.log('RELEASE FINISHED SUCCESSFULLY');
+    }
+
 
     runSequence(
         releaseType(releaseTypeName),
@@ -385,7 +395,8 @@ gulp.task('release', () => {
         'commit-changes',
         'push-changes',
         'create-new-tag',
-        'github-release'
+        'github-release',
+        callback
     );
 });
 
