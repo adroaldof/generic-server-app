@@ -31,8 +31,8 @@ UserSchema.statics = {
     /**
      * Crete a new user
      *
-     * @apiParam {Object} opts User data
-     * @apiParam {Function} callback Callback function
+     * @param {Object} opts User data
+     * @param {Function} callback Callback function
      */
     register (opts, callback) {
         const self = this;
@@ -70,9 +70,9 @@ UserSchema.statics = {
     /**
      * Authenticate a user
      *
-     * @apiParam {String} email User email
-     * @apiParam {String} password User password
-     * @apiParam {Function} callback Callback function
+     * @param {String} email User email
+     * @param {String} password User password
+     * @param {Function} callback Callback function
      */
     authenticate (email, password, callback) {
         const self = this;
@@ -114,10 +114,12 @@ UserSchema.statics = {
 
 
     /**
-     * Retrieve an user information
+     * Change user password
      *
-     * @apiParam {ObjectId} id The ObjectId referent to user identification
-     * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
+     * @param {ObjectId} id The ObjectId referent to user identification
+     * @param {String} oldPassword The current used password
+     * @param {String} newPassword The new password to be used
+     * @param {Function} callback Function to process on change password reach end or error
      */
     changePassword (id, oldPassword, newPassword, callback) {
         const self = this;
@@ -172,8 +174,8 @@ UserSchema.statics = {
     /**
      * Retrieve an user information
      *
-     * @apiParam {ObjectId} id The ObjectId referent to user identification
-     * @apiSuccess {Promise<User, APIError>} Returns a promise with the user information or an error
+     * @param {ObjectId} id The ObjectId referent to user identification
+     * @param {function} callback Function to process on change password reach end or error
      */
     get (id, callback) {
         const notFound = new APIError('No such user found!', httpStatus.NOT_FOUND);
@@ -194,9 +196,8 @@ UserSchema.statics = {
     /**
      * List users in descending order of 'createdAt' timestamp
      *
-     * @apiParam {Number} skip Number of users to be skipped
-     * @apiParam {Number} limit Limit number or users to be returned
-     * @apiSuccess {Promise<User[]>} Returns an array of users objects
+     * @param {Number} skip Number of users to be skipped
+     * @param {Number} limit Limit number or users to be returned
      */
     list ({ skip = 0, limit = 50 } = {}) {
         return this.find()

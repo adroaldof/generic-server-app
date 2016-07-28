@@ -3,7 +3,10 @@ import User from './model';
 import _ from 'lodash';
 
 /**
- * @api {POST} /api/{version}/user Create a new user
+ * @api {POST} /api/{version}/user Create a new user and login
+ *
+ * It creates a new user and if goes well login this user
+ *
  * @apiName CreateUser
  * @apiGroup User
  *
@@ -72,7 +75,7 @@ function list (req, res, next) {
 
 
 /**
- * @api {GET} /api/{version}/user/:id Get an user and append to resources on request object
+ * @api {GET} /api/{version}/user/:id Get an user
  * @apiName GetUser
  * @apiGroup User
  *
@@ -103,7 +106,7 @@ function get (req, res, next) {
 
 
 /**
- * @api {GET} /api/{version}/user/:id Load an user and append to resources on request object
+ * @api {GET} /api/{version}/user/:id Load an user
  * @apiName LoadUser
  * @apiGroup User
  *
@@ -142,8 +145,9 @@ function load (req, res, next) {
  * @apiName RemoveUser
  * @apiGroup User
  *
- * @apiParam {User} user User to be removed
+ * @apiPermission authenticated
  *
+ * @apiParam {User} user User to be removed
  * @apiParam (Login) {String} pass Only logged in users can post this.
  *
  * @apiSuccess {User} user Returns the deleted user
@@ -178,6 +182,8 @@ function remove (req, res, next) {
  * @api {PUT} /api/{version}/user/:id Update an existing user
  * @apiName UpdateUser
  * @apiGroup User
+ *
+ * @apiPermission authenticated
  *
  * @apiParam {String} name name of user
  * @apiParam {String} mobileNumber Mobile phone number
