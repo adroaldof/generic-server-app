@@ -16,11 +16,15 @@ git clone git@github.com:adroaldof/generic-app-server.git
 cd generic-app-server
 ```
 
+**If you use NVM**
+```bash
+nvm use
+```
+
 **Install global dependencies**
 ```bash
 npm install -g gulp-cli
 ```
-
 
 **Install project dependencies**
 ```bash
@@ -37,7 +41,7 @@ Here are some shortcut commands that I use
 | NPM | Gulp | Description |
 | :---                 | :---               | :---
 | `npm run serve`      | `gulp serve`       | Run local server with live reload on change |
-| `npm run full-serve` | `gulp full-serve`  | Run test, documentation and start local server with live reload on change |
+| `npm run full-serve` | `gulp full-serve`  | Run test, documentation and start local server |
 | `npm run tests`      | `gulp test`        | Run tests and generate `coverage` directory results |
 | `npm run lint`       | `gulp lint`        | Lint JS files (JSHint and JSCS) |
 | `npm run documentate`| `gulp documentate` | Generate documentation and locate at `docs` folder |
