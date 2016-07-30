@@ -8,7 +8,7 @@ import app from '../../index';
 import User from './model';
 
 
-describe('User APIs', () => {
+describe(':: User APIs ::', () => {
     let fullUser = {};
     let savedUser = {};
 
@@ -174,11 +174,12 @@ describe('User APIs', () => {
             request(app)
                 .get('/api/users/575e0308f7722f9771aaaaaa')
                 .accept('application/json')
-                .expect(httpStatus.NOT_FOUND)
+                .expect(httpStatus.OK)
                 .then((res) => {
-                    const answer = res.body;
+                    const answer = res.body.data.err;
 
-                    expect(answer.message).to.equal('Not Found');
+                    expect(answer.name).to.equal('Error');
+                    expect(answer.info).to.equal('No such user found!');
 
                     done();
                 });
@@ -189,11 +190,13 @@ describe('User APIs', () => {
             request(app)
                 .get('/api/users/56z787zzz67fc')
                 .accept('application/json')
-                .expect(httpStatus.INTERNAL_SERVER_ERROR)
+                .expect(httpStatus.OK)
                 .then((res) => {
-                    const answer = res.body;
+                    const answer = res.body.data.err;
 
-                    expect(answer.message).to.equal('Internal Server Error');
+                    expect(answer.name).to.equal('CastError');
+                    expect(answer.kind).to.equal('ObjectId');
+                    expect(answer.message).to.contains('Cast to ObjectId failed');
 
                     done();
                 });
