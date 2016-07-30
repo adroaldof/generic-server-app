@@ -86,9 +86,8 @@ function list (req, res, next) {
  * @apiSuccess {User} user Returns an user
  * @apiError {Object} error Error message
  */
-/* istanbul ignore next */
 function get (req, res, next) {
-    const userId = req.params.userId;
+    const userId = req.params.id;
     req.resources = req.resources || { data: {} };
 
     return User.get(userId, (err, user) => {

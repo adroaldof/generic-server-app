@@ -16,7 +16,7 @@ router.route('/')
     );
 
 router.route('/:id')
-    .get(userCtrl.load, response.send);
+    .get(userCtrl.get, response.send);
 
 router.route('/:id/update')
     .put(validate(validator.updateUser), userCtrl.load, userCtrl.update, response.send);
