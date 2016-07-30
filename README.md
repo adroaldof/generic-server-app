@@ -1,13 +1,13 @@
 [![Codeship Status for adroaldof/generic-server-app](https://img.shields.io/codeship/810993d0-34ff-0134-9930-761d96654ee5/master.svg?style=flat-square)](https://www.codeship.io/projects/165138)
-[![Codecov private](https://img.shields.io/codecov/c/token/YLeMzfYLuj/github/adroaldof/generic-server-app/master.svg?maxAge=2592000&style=flat-square)]()
+[![Codecov private](https://img.shields.io/codecov/c/token/YLeMzfYLuj/github/adroaldof/generic-server-app/master.svg?maxAge=2592000&style=flat-square)](https://codecov.io/gh/adroaldof/generic-server-app)
 [![Dependency Status](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43)
 
 # Generic Server
-
+---
 This project is a generic server sample.
 
 ## Start Using
-
+---
 To work on this project follow the rules
 
 **Clone the repo**
@@ -35,7 +35,7 @@ And you are good to go. Checkout the commands bellow and enjoy :)
 
 
 ## Useful Commands
-
+---
 Here are some shortcut commands that I use
 
 | NPM | Gulp | Description |
@@ -54,7 +54,7 @@ Here are some shortcut commands that I use
 
 
 ## Local Static Front
-
+---
 If you want to see some front-end there are a sample implementation
 
 ```bash
@@ -64,9 +64,19 @@ npm run serve
 Go to your browser at location [http://localhost:3000](http://localhost:3000)
 
 
+## Some useful services used on project
+---
+The follow services were used to build this project. This is a start. You can choose all serices at your own taste.
+
+- [GitHub](https://github.com) - An awesome repo... You know what it is...
+- [Heroku](https://www.heroku.com) - Build, run and operate
+- [Codeship](https://codeship.com/) - Continuous integration and delivery
+- [Codecov](https://codecov.io) - Code coverage
+- [VersionEye](https://www.versioneye.com) - Dependency checker
+
 
 ## Some References
-
+---
 The follow references were used to build this project. Thank you so much guys :+1:
 
 - [Kunal Kapadia - express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api)
