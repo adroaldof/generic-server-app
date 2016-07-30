@@ -1,6 +1,7 @@
 [![Codeship Status for adroaldof/generic-server-app](https://img.shields.io/codeship/810993d0-34ff-0134-9930-761d96654ee5/master.svg?style=flat-square)](https://www.codeship.io/projects/165138)
 [![Codecov private](https://img.shields.io/codecov/c/token/YLeMzfYLuj/github/adroaldof/generic-server-app/master.svg?maxAge=2592000&style=flat-square)](https://codecov.io/gh/adroaldof/generic-server-app)
 [![Dependency Status](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=generic-server-app&style=flat)](https://generic-server-app.herokuapp.com)
 
 
 # Generic Server
