@@ -2,13 +2,15 @@
 [![Codecov private](https://img.shields.io/codecov/c/token/YLeMzfYLuj/github/adroaldof/generic-server-app/master.svg?maxAge=2592000&style=flat-square)](https://codecov.io/gh/adroaldof/generic-server-app)
 [![Dependency Status](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/579a85ba3815c80028e2ea43)
 
+
 # Generic Server
 ---
-This project is a generic server sample.
+This project is a generic server sample
+
 
 ## Start Using
 ---
-To work on this project follow the rules
+To work on this project follow the next steps
 
 **Clone the repo**
 ```bash
@@ -36,7 +38,7 @@ And you are good to go. Checkout the commands bellow and enjoy :)
 
 ## Useful Commands
 ---
-Here are some shortcut commands that I use
+Here are some shortcut commands that can be used
 
 | NPM | Gulp | Description |
 | :---                 | :---               | :---
@@ -89,4 +91,8 @@ The follow references were used to build this project. Thank you so much guys :+
 - [RESTful API User Authentication with Node.js and AngularJS – Part 1/2: Server](https://devdactic.com/restful-api-user-authentication-1/)
 - [Scotch Media - Sending Email with Nodemailer and node-mailer-templates](http://www.scotchmedia.com/tutorials/express/authentication/3/02)
 - [Andrew Kelley - Rapid Development Email Templates with Node.js](http://andrewkelley.me/post/swig-email-templates.html)
+
+
+---
+Enjoy :wink:
 
