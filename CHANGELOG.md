@@ -1,3 +1,21 @@
+<a name="0.0.6"></a>
+## 0.0.6 (2016-07-30)
+
+* Add coverage badge ([bd78d52](https://github.com/adroaldof/generic-app-server/commit/bd78d52))
+* Add heroku badge ([05b7fce](https://github.com/adroaldof/generic-app-server/commit/05b7fce))
+* Add ignore on files to test coverage badge ([3dfa063](https://github.com/adroaldof/generic-app-server/commit/3dfa063))
+* Add initial codecov.yml file ([de4d706](https://github.com/adroaldof/generic-app-server/commit/de4d706))
+* Add some services used on project ([9eed416](https://github.com/adroaldof/generic-app-server/commit/9eed416))
+* Add version eye dependencies badge ([cb83cab](https://github.com/adroaldof/generic-app-server/commit/cb83cab))
+* Change building badge to squared flat version ([58ca4e3](https://github.com/adroaldof/generic-app-server/commit/58ca4e3))
+* Change file name to end to end tests ([9d3c130](https://github.com/adroaldof/generic-app-server/commit/9d3c130))
+* Code fix on read me file ([4224846](https://github.com/adroaldof/generic-app-server/commit/4224846))
+* Fix load to get on api ([4e3ed0f](https://github.com/adroaldof/generic-app-server/commit/4e3ed0f))
+* Fix text on readme ([9ca3bcd](https://github.com/adroaldof/generic-app-server/commit/9ca3bcd))
+* Update project dependencies ([a60f1e2](https://github.com/adroaldof/generic-app-server/commit/a60f1e2))
+
+
+
 <a name="0.0.5"></a>
 ## 0.0.5 (2016-07-28)
 
