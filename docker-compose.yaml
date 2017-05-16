@@ -30,3 +30,26 @@ services:
     links:
      - mongo
 
+  mongo-test:
+    image: mongo:3.0
+    ports:
+      - '27017:27017'
+
+  generics-express-api-test:
+    build: .
+    command: gulp test
+    environment:
+      NODE_ENV: test
+      DEBUG: 'generics-express-api-test'
+      VIRTUAL_HOST: 0.0.0.0
+      VIRTUAL_PORT: 3002
+      AUTH_PASSWORD: 58SyM;lYnE/B1xd7rjKJ2]7.543&UWnv
+      JWT_KEY: vZiYpmTzqXMp8PpYXKwqc9ShQ1UhyAfy
+    ports:
+      - '3002:3002'
+    volumes:
+      - ./:/home/app/library
+      - /home/app/library/node_modules
+    links:
+     - mongo-test
+
