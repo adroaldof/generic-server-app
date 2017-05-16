@@ -10,10 +10,10 @@
   },
   "scripts": {
     "postinstall": "gulp transpile",
-    "start": "node lib/index.js",
+    "start": "docker-compose up generics-express-api",
     "serve": "gulp serve",
     "full-serve": "gulp full-serve",
-    "test": "gulp test",
+    "test": "docker-compose up generics-express-api-test",
     "lint": "gulp lint",
     "documentate": "gulp documentate",
     "clean": "gulp clean",
