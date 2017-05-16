@@ -19,41 +19,34 @@ git clone git@github.com:adroaldof/generic-app-server.git
 cd generic-app-server
 ```
 
-**If you use NVM**
-```bash
-nvm use
-```
+**You will need docker and docker-compose to run this project**
 
-**Install global dependencies**
-```bash
-npm install -g gulp-cli
-```
-
-**Install project dependencies**
-```bash
-npm install
-```
+To any help on install on Ubuntu check this this [Docker](https://github.com/adroaldof/dotfiles/blob/master/setup-machine.sh#L149) and [Docker-compose](https://github.com/adroaldof/dotfiles/blob/master/setup-machine.sh#L176) commands
 
 And you are good to go. Checkout the commands bellow and enjoy :)
 
 
 ## Useful Commands
 ---
+Main commands
+
+| NPM | Description y
+| :---                 | :---
+| `npm start`          | Run docker container server with live reload on change |
+| `npm test`           | Run docker container with tests |
+
 Here are some shortcut commands that can be used
 
-| NPM | Gulp | Description |
-| :---                 | :---               | :---
-| `npm run serve`      | `gulp serve`       | Run local server with live reload on change |
-| `npm run full-serve` | `gulp full-serve`  | Run test, documentation and start local server |
-| `npm run tests`      | `gulp test`        | Run tests and generate `coverage` directory results |
-| `npm run lint`       | `gulp lint`        | Lint JS files (JSHint and JSCS) |
-| `npm run documentate`| `gulp documentate` | Generate documentation and locate at `docs` folder |
-| `npm run clean`      | `gulp clean`       | Clean all generated files (`docs`, `dist`) |
-| `npm run pre`        | `gulp pre`         | Crete a Git Tag with pre release (E.g. 0.0.0-1) |
-| `npm run patch`      | `gulp patch`       | Crete a Git Tag with patch release (E.g. 0.0.1) |
-| `npm run minor`      | `gulp minor`       | Crete a Git Tag with minor release (E.g. 0.1.0) |
-| `npm run major`      | `gulp major`       | Crete a Git Tag with major release (E.g. 1.0.0) |
-| `npm run help`       | `gulp help`        | Show help command options |
+| NPM | Description y
+| :---                 | :---
+| `npm run lint`       | Lint JS files (JSHint and JSCS) |
+| `npm run documentate`| Generate documentation and locate at `docs` folder |
+| `npm run clean`      | Clean all generated files (`docs`, `dist`) |
+| `npm run pre`        | Crete a Git Tag with pre release (E.g. 0.0.0-1) |
+| `npm run patch`      | Crete a Git Tag with patch release (E.g. 0.0.1) |
+| `npm run minor`      | Crete a Git Tag with minor release (E.g. 0.1.0) |
+| `npm run major`      | Crete a Git Tag with major release (E.g. 1.0.0) |
+| `npm run help`       | Show help command options |
 
 
 ## Local Static Front

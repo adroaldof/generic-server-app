@@ -9,10 +9,8 @@
     "npm": "3.8.x"
   },
   "scripts": {
-    "postinstall": "gulp transpile",
     "start": "docker-compose up generics-express-api",
     "serve": "gulp serve",
-    "full-serve": "gulp full-serve",
     "test": "docker-compose up generics-express-api-test",
     "lint": "gulp lint",
     "documentate": "gulp documentate",
