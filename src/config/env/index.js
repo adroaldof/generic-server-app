@@ -9,10 +9,10 @@ const env = process.env.NODE_ENV || 'development';
 
 const config = require(path.join(__dirname, `${ env }`));
 const defaults = {
-    root: path.join(__dirname, '/..'),
-    app: {
-        name: 'Generic Server App'
-    }
+  root: path.join(__dirname, '/..'),
+  app: {
+    name: 'Generic Server App'
+  }
 };
 
 _.assign(config, defaults);
