@@ -1,0 +1,32 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:3.0
+    ports:
+      - '27017:27017'
+    volumes_from:
+      - mongodata
+
+  mongodata:
+    image: tianon/true
+    volumes:
+      - /data/db
+
+  generics-express-api:
+    build: .
+    command: node_modules/.bin/nodemon --exec npm run serve
+    environment:
+      NODE_ENV: development
+      DEBUG: 'generics-express-api'
+      VIRTUAL_HOST: 0.0.0.0
+      VIRTUAL_PORT: 3001
+      AUTH_PASSWORD: 58SyM;lYnE/B1xd7rjKJ2]7.543&UWnv
+      JWT_KEY: vZiYpmTzqXMp8PpYXKwqc9ShQ1UhyAfy
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./:/home/app/library
+      - /home/app/library/node_modules
+    links:
+     - mongo
+
