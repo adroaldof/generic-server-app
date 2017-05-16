@@ -6,28 +6,28 @@ import LocalStrategy from 'passport-local';
 import User from '../../api/users/model';
 
 function localStrategy (passport) {
-    const strategyParams = {
-        usernameField: 'email',
-        passwordField: 'password'
-    };
+  const strategyParams = {
+    usernameField: 'email',
+    passwordField: 'password'
+  };
 
-    // TODO: findout a way to test this
-    /* istanbul ignore next */
-    passport.use('local', new LocalStrategy(strategyParams, (email, password, done) => {
-        User.authenticate(email, password, (err, user) => {
-            if (err) {
-                return done(err);
-            }
+  // TODO: findout a way to test this
+  /* istanbul ignore next */
+  passport.use('local', new LocalStrategy(strategyParams, (email, password, done) => {
+    User.authenticate(email, password, (err, user) => {
+      if (err) {
+        return done(err);
+      }
 
-            if (!user) {
-                return done(null, false, {
-                    message: 'Invalid email or password'
-                });
-            }
-
-            return done(null, user);
+      if (!user) {
+        return done(null, false, {
+          message: 'Invalid email or password'
         });
-    }));
+      }
+
+      return done(null, user);
+    });
+  }));
 }
 
 export default localStrategy;

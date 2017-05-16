@@ -32,9 +32,9 @@ initExpress(app);
  */
 /* istanbul ignore next */
 if (!module.parent) {
-    app.listen(config.port, () => {
-        debug(`Server started on port ${ config.port } (${ config.env })`);
-    });
+  app.listen(config.port, () => {
+    debug(`Server started on port ${ config.port } (${ config.env })`);
+  });
 }
 
 export default app;
