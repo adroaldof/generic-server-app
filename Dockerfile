@@ -12,6 +12,6 @@ RUN npm cache clean && \
   npm install # --silent --progress=false
 
 COPY . $WORK_DIR/
-EXPOSE 3001
+EXPOSE 3002
 
 CMD ["npm", "start"]
