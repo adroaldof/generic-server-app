@@ -16,7 +16,6 @@
       "anonymous": "always",
       "named": "always"
     }],
-		"comma-dangle": ["error", "never"],
 		"no-use-before-define": [2, "nofunc"],
     "arrow-body-style": 0,
     "arrow-parens": [2, "as-needed"],

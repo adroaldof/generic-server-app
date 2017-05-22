@@ -1,26 +1,23 @@
 import crypto from 'crypto';
 
-const LEN = 16;
+const bytesSize = 16;
 
-function generateToken (randomBytes, callback) {
-    let randomBytesSize = randomBytes;
+export default function generateToken (randomBytes) {
+  let randomBytesSize = randomBytes;
 
-    if (!randomBytes || randomBytesSize === null || typeof randomBytesSize !== 'number') {
-        randomBytesSize = LEN;
-    }
+  if (!randomBytesSize || typeof randomBytesSize !== 'number') {
+    randomBytesSize = bytesSize;
+  }
 
-    randomBytesSize = randomBytesSize / 2;
+  randomBytesSize = randomBytesSize / 2;
 
-    crypto.randomBytes(randomBytesSize, (err, buffer) => {
-        if (err) {
-            return callback(err);
-        }
+  const buffer = crypto.randomBytes(randomBytesSize);
+  console.log('*************** token ***********************');
+  console.log('buffer', buffer);
+  const token = buffer.toString('hex');
+  console.log('token', token);
+  console.log('*************** token ***********************');
 
-        const token = buffer.toString('hex');
-
-        return callback(null, token);
-    });
+  return token;
 }
-
-export default generateToken;
 

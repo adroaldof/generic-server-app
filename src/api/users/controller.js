@@ -19,26 +19,26 @@ import _ from 'lodash';
  * @apiError {Object} error Error message
  */
 function create (req, res, next) {
-    const userData = _.pick(req.body, ['name', 'email', 'password', 'mobileNumber']);
-    req.resources = req.resources || { data: {} };
+  const userData = _.pick(req.body, ['name', 'email', 'password', 'mobileNumber']);
+  req.resources = req.resources || { data: {} };
 
-    return User.register(userData, (err, user) => {
-        if (err) {
-            req.resources.data = { err };
-            return next();
-        }
+  return User.register(userData, (err, user) => {
+    if (err) {
+      req.resources.data = { err };
+      return next();
+    }
 
-        return req.logIn(user, (err) => { // eslint-disable-line no-shadow
-            if (err) {
-                req.resources.data = { err };
-                return next();
-            }
+    return req.logIn(user, err => { // eslint-disable-line no-shadow
+      if (err) {
+        req.resources.data = { err };
+        return next();
+      }
 
-            req.resources.data.user = user;
-            req.resources.shoudRedirect = true;
-            return next();
-        });
+      req.resources.data.user = user;
+      req.resources.shoudRedirect = true;
+      return next();
     });
+  });
 }
 
 
@@ -56,21 +56,21 @@ function create (req, res, next) {
  * @apiError {Object} error Error message
  */
 function list (req, res, next) {
-    const { limit = 50, skip = 0 } = req.query;
-    req.resources = req.resources || { data: {} };
+  const { limit = 50, skip = 0 } = req.query;
+  req.resources = req.resources || { data: {} };
 
-    return User.list({ limit, skip })
-        .then((users) => {
-            req.resources.data = { users };
-            req.resources.info = 'Got users list';
+  return User.list({ limit, skip })
+    .then(users => {
+      req.resources.data = { users };
+      req.resources.info = 'Got users list';
 
-            return next();
-        })
-        .error((err) => {
-            req.resources.data = { err };
+      return next();
+    })
+    .error(err => {
+      req.resources.data = { err };
 
-            return next();
-        });
+      return next();
+    });
 }
 
 
@@ -87,21 +87,21 @@ function list (req, res, next) {
  * @apiError {Object} error Error message
  */
 function get (req, res, next) {
-    const userId = req.params.id;
-    req.resources = req.resources || { data: {} };
+  const userId = req.params.id;
+  req.resources = req.resources || { data: {} };
 
-    return User.get(userId, (err, user) => {
-        if (err) {
-            req.resources.data = { err };
+  return User.get(userId, (err, user) => {
+    if (err) {
+      req.resources.data = { err };
 
-            return next();
-        }
+      return next();
+    }
 
-        req.resources.data = { user };
-        req.resources.info = 'Got user';
+    req.resources.data = { user };
+    req.resources.info = 'Got user';
 
-        return next();
-    });
+    return next();
+  });
 }
 
 
@@ -118,25 +118,25 @@ function get (req, res, next) {
  * @apiError {Object} error Error message
  */
 function load (req, res, next) {
-    const userId = req.params.id;
-    req.resources = req.resources || {};
+  const userId = req.params.id;
+  req.resources = req.resources || {};
 
-    return User.get(userId, (err, user) => {
-        if (err) {
-            _.assign(req.resources, {
-                data: { err }
-            });
+  return User.get(userId, (err, user) => {
+    if (err) {
+      _.assign(req.resources, {
+        data: { err }
+      });
 
-            return next(err);
-        }
+      return next(err);
+    }
 
-        _.assign(req.resources, {
-            data: { user },
-            page: 'user/info'
-        });
-
-        return next();
+    _.assign(req.resources, {
+      data: { user },
+      page: 'user/info'
     });
+
+    return next();
+  });
 }
 
 
@@ -154,27 +154,27 @@ function load (req, res, next) {
  * @apiError {Object} error Error message
  */
 function remove (req, res, next) {
-    const user = req.resources.data.user;
+  const user = req.resources.data.user;
 
-    return user.removeAsync()
-        .then((removedUser) => {
-            _.unset(req.resources, 'data.user');
-            _.assign(req.resources, {
-                data: removedUser,
-                info: {
-                    success: true,
-                    message: 'User removed successfully'
-                },
-                shouldRedirect: true
-            });
+  return user.removeAsync()
+    .then(removedUser => {
+      _.unset(req.resources, 'data.user');
+      _.assign(req.resources, {
+        data: removedUser,
+        info: {
+          success: true,
+          message: 'User removed successfully'
+        },
+        shouldRedirect: true
+      });
 
-            return next();
-        })
-        .error((err) => {
-            req.resources.data = { err };
+      return next();
+    })
+    .error(err => {
+      req.resources.data = { err };
 
-            return next();
-        });
+      return next();
+    });
 }
 
 
@@ -194,19 +194,19 @@ function remove (req, res, next) {
  * @apiError {Object} error Error message
  */
 function update (req, res, next) {
-    const user = req.resources.data.user;
+  const user = req.resources.data.user;
 
-    _.assign(user, req.body);
+  _.assign(user, req.body);
 
-    user.saveAsync()
-        .then((updateUser) => {
-            req.resources.data.user = updateUser;
-            return next();
-        })
-        .error((err) => {
-            req.resources.data = { err };
-            return next();
-        });
+  user.saveAsync()
+    .then(updateUser => {
+      req.resources.data.user = updateUser;
+      return next();
+    })
+    .error(err => {
+      req.resources.data = { err };
+      return next();
+    });
 }
 
 
@@ -224,22 +224,22 @@ function update (req, res, next) {
  * @apiError {Object} error Error message
  */
 function changePassword (req, res, next) {
-    const user = req.resources.data.user;
-    const info = req.body;
+  const user = req.resources.data.user;
+  const info = req.body;
 
-    req.resources = req.resources || {};
+  req.resources = req.resources || {};
 
-    User.changePassword(user._id, info.password, // eslint-disable-line no-underscore-dangle
-        info.newPassword, (err, changedInfo) => {
-            if (err) {
-                req.resources.data = { err };
-                return next();
-            }
+  User.changePassword(user._id, info.password, // eslint-disable-line no-underscore-dangle
+    info.newPassword, (err, changedInfo) => {
+      if (err) {
+        req.resources.data = { err };
+        return next();
+      }
 
-            req.resources.info = changedInfo;
-            req.resources.shoudRedirect = true;
-            return next();
-        });
+      req.resources.info = changedInfo;
+      req.resources.shoudRedirect = true;
+      return next();
+    });
 }
 
 

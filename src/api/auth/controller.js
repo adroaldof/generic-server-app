@@ -11,58 +11,58 @@ import passport from 'passport';
  * @apiSuccess {Object} data Returns a logged user
  *
  * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 Found
- *     {
- *          data: {
- *              user: {
- *                  _id: '578f947b57ad33a843b7eda2',
- *                  name: 'John Doe',
- *                  email: 'john-doe@gmail.com'
- *              }
- *          },
- *          info: 'Successfully logged in',
- *          status: 200,
- *          page: '/user/578f947b57ad33a843b7eda2',
- *          shouldRedirect: true
- *     }
+ *   HTTP/1.1 200 Found
+ *   {
+ *      data: {
+ *        user: {
+ *          _id: '578f947b57ad33a843b7eda2',
+ *          name: 'John Doe',
+ *          email: 'john-doe@gmail.com'
+ *        }
+ *      },
+ *      info: 'Successfully logged in',
+ *      status: 200,
+ *      page: '/user/578f947b57ad33a843b7eda2',
+ *      shouldRedirect: true
+ *   }
  *
  * @apiError UserNotFound User not found
  *
  * @apiErrorExample Error-Response:
- *     HTTP/1.1 404 Not Found
- *     {
- *          data: {
- *              err: 'User not found',
- *              status: 404
- *          },
- *          page: '/'
- *     }
+ *   HTTP/1.1 404 Not Found
+ *   {
+ *      data: {
+ *        err: 'User not found',
+ *        status: 404
+ *      },
+ *      page: '/'
+ *   }
  */
 
 function signin (req, res, next) {
-    req.resources = req.resources || {};
+  req.resources = req.resources || {};
 
-    passport.authenticate('local', { failureRedirect: '/' }, (err, user, info) => {
-        if (err || !user) {
-            _.assign(req.resources, {
-                data: { err: err || 'No user found' },
-                page: '/'
-            });
+  passport.authenticate('local', { failureRedirect: '/' }, (err, user, info) => {
+    if (err || !user) {
+      _.assign(req.resources, {
+        data: { err: err || 'No user found' },
+        page: '/'
+      });
 
-            return next();
-        }
+      return next();
+    }
 
-        return req.logIn(user, () => {
-            _.assign(req.resources, {
-                data: { user },
-                info,
-                page: String('/user/').concat(user._id), // eslint-disable-line no-underscore-dangle
-                shouldRedirect: true
-            });
+    return req.logIn(user, () => {
+      _.assign(req.resources, {
+        data: { user },
+        info,
+        page: String('/user/').concat(user._id), // eslint-disable-line no-underscore-dangle
+        shouldRedirect: true
+      });
 
-            return next();
-        });
-    })(req, res, next);
+      return next();
+    });
+  })(req, res, next);
 }
 
 
@@ -74,25 +74,25 @@ function signin (req, res, next) {
  * @apiSuccess {Object} data Logout message
  *
  * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 Found
- *     {
- *          info: 'Successfully logged out',
- *          status: 200,
- *          shouldRedirect: true
- *     }
+ *   HTTP/1.1 200 Found
+ *   {
+ *      info: 'Successfully logged out',
+ *      status: 200,
+ *      shouldRedirect: true
+ *   }
  */
 
 function signout (req, res, next) {
-    req.resources = req.resources || {};
+  req.resources = req.resources || {};
 
-    req.logout();
+  req.logout();
 
-    _.assign(req.resources, {
-        info: 'Successfully logged out',
-        shouldRedirect: true
-    });
+  _.assign(req.resources, {
+    info: 'Successfully logged out',
+    shouldRedirect: true
+  });
 
-    return next();
+  return next();
 }
 
 export default { signin, signout };

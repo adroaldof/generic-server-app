@@ -3,9 +3,8 @@ import path from 'path';
 
 import config from './config/env/index';
 
-import { default as initDb } from './config/mongoose';
-import { default as initModels } from './config/models';
-import { default as initExpress } from './config/express';
+import { initModels } from './config/models';
+import { initExpress } from './config/express';
 
 
 const app = express();
@@ -22,7 +21,6 @@ app.set('config', config);
 /**
  * Start system modules
  */
-initDb(app);
 initModels(app);
 initExpress(app);
 
@@ -33,7 +31,7 @@ initExpress(app);
 /* istanbul ignore next */
 if (!module.parent) {
   app.listen(config.port, () => {
-    debug(`Server started on port ${ config.port } (${ config.env })`);
+    debug(`Server started on port ${config.port} (${config.env})`);
   });
 }
 

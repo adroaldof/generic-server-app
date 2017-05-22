@@ -5,37 +5,37 @@ import _ from 'lodash';
 
 /* istanbul ignore next */
 function load (data, page) {
-    return function loadRequest (req, res, next) {
-        req.resources = req.resources || { data: {} };
+  return function loadRequest (req, res, next) {
+    req.resources = req.resources || { data: {} };
 
-        _.assign(req.resources.data, data);
-        req.resources.page = page || undefined;
+    _.assign(req.resources.data, data);
+    req.resources.page = page || undefined;
 
-        next();
-    };
+    next();
+  };
 }
 
 /* istanbul ignore next */
 function send (req, res) {
-    const resources = req.resources;
+  const resources = req.resources;
 
-    return res.format({
-        'text/html': () => {
-            if (resources && resources.shouldRedirect) {
-                return res.redirect(302, resources.page);
-            }
+  return res.format({
+    'text/html': () => {
+      if (resources && resources.shouldRedirect) {
+        return res.redirect(302, resources.page);
+      }
 
-            return res.render(resources.page, resources.data || resources.error);
-        },
+      return res.render(resources.page, resources.data || resources.error);
+    },
 
-        'application/json': () => {
-            res.send(resources);
-        },
+    'application/json': () => {
+      res.send(resources);
+    },
 
-        default: () => {
-            res.send(406).send('Not Acceptable');
-        }
-    });
+    default: () => {
+      res.send(406).send('Not Acceptable');
+    }
+  });
 }
 
 

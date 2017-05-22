@@ -28,184 +28,184 @@ const UserSchema = new mongoose.Schema({
 
 
 UserSchema.statics = {
-    /**
-     * Crete a new user
-     *
-     * @param {Object} opts User data
-     * @param {Function} callback Callback function
-     */
-    register (opts, callback) {
-        const self = this;
-        const data = _.cloneDeep(opts);
+  /**
+   * Crete a new user
+   *
+   * @param {Object} opts User data
+   * @param {Function} callback Callback function
+   */
+  register (opts, callback) {
+    const self = this;
+    const data = _.cloneDeep(opts);
 
-        if (!data.password) {
-            const err = new APIError('Password must be supplied', httpStatus.NOT_FOUND);
+    if (!data.password) {
+      const err = new APIError('Password must be supplied', httpStatus.NOT_FOUND);
 
-            return callback(err, null);
+      return callback(err, null);
+    }
+
+    return hashPassword(opts.password, (error, hashedPassword, salt) => {
+      if (error) {
+        return callback(error);
+      }
+
+      data.password = hashedPassword;
+      data.passwordSalt = salt;
+
+      return self.create(data, (err, user) => {
+        if (err) {
+          return callback(err, null);
+        }
+        const savedUser = user;
+
+        savedUser.password = undefined;
+        savedUser.passwordSalt = undefined;
+
+        return callback(err, savedUser);
+      });
+    });
+  },
+
+
+  /**
+   * Authenticate a user
+   *
+   * @param {String} email User email
+   * @param {String} password User password
+   * @param {Function} callback Callback function
+   */
+  authenticate (email, password, callback) {
+    const self = this;
+
+    return self.findOne({ email })
+      .select('+password +passwordSalt')
+      .exec((err, user) => {
+        if (err) {
+          return callback(err);
         }
 
-        return passwordHelper.hashPassword(opts.password, (error, hashedPassword, salt) => {
+        // Case no user return an empty user
+        if (!user) {
+          return callback(err, user);
+        }
+
+        const authenticatedUser = user;
+
+        // Verify password with existing hash from user
+        return verify(password, user.password, user.passwordSalt,
+          (error, result) => {
             if (error) {
-                return callback(error);
+              return callback(err, null);
             }
 
-            data.password = hashedPassword;
-            data.passwordSalt = salt;
+            // If password does not match don't return use
+            if (result === false) {
+              return callback(err, null);
+            }
 
-            return self.create(data, (err, user) => {
-                if (err) {
+            // Remove password and salt from result
+            authenticatedUser.password = undefined;
+            authenticatedUser.passwordSalt = undefined;
+
+            return callback(err, authenticatedUser);
+          });
+      });
+  },
+
+
+  /**
+   * Change user password
+   *
+   * @param {ObjectId} id The ObjectId referent to user identification
+   * @param {String} oldPassword The current used password
+   * @param {String} newPassword The new password to be used
+   * @param {Function} callback Function to process on change password reach end or error
+   */
+  changePassword (id, oldPassword, newPassword, callback) {
+    const self = this;
+
+    return self.findById({ _id: id })
+      .select('+password +passwordSalt')
+      .exec((err, user) => {
+        if (err) {
+          return callback(err, null);
+        }
+
+        if (!user) {
+          return callback(err, user);
+        }
+
+        const anUser = user;
+
+        return verify(oldPassword, anUser.password, anUser.passwordSalt,
+          (err, result) => { // eslint-disable-line no-shadow
+            if (err) {
+              return callback(err, null);
+            }
+
+            if (!result) {
+              const PassNoMatchError = new Error('Old password does not match');
+              PassNoMatchError.type = 'old_password_does_not_match';
+
+              return callback(PassNoMatchError, null);
+            }
+
+            return hashPassword(newPassword,
+              (err, hashedPass, salt) => { // eslint-disable-line no-shadow
+                anUser.password = hashedPass;
+                anUser.passwordSalt = salt;
+
+                return anUser.save(err => { // eslint-disable-line no-shadow
+                  if (err) {
                     return callback(err, null);
-                }
-                const savedUser = user;
+                  }
 
-                savedUser.password = undefined;
-                savedUser.passwordSalt = undefined;
-
-                return callback(err, savedUser);
-            });
-        });
-    },
-
-
-    /**
-     * Authenticate a user
-     *
-     * @param {String} email User email
-     * @param {String} password User password
-     * @param {Function} callback Callback function
-     */
-    authenticate (email, password, callback) {
-        const self = this;
-
-        return self.findOne({ email })
-            .select('+password +passwordSalt')
-            .exec((err, user) => {
-                if (err) {
-                    return callback(err);
-                }
-
-                // Case no user return an empty user
-                if (!user) {
-                    return callback(err, user);
-                }
-
-                const authenticatedUser = user;
-
-                // Verify password with existing hash from user
-                return passwordHelper.verify(password, user.password, user.passwordSalt,
-                    (error, result) => {
-                        if (error) {
-                            return callback(err, null);
-                        }
-
-                        // If password does not match don't return use
-                        if (result === false) {
-                            return callback(err, null);
-                        }
-
-                        // Remove password and salt from result
-                        authenticatedUser.password = undefined;
-                        authenticatedUser.passwordSalt = undefined;
-
-                        return callback(err, authenticatedUser);
-                    });
-            });
-    },
+                  return callback(err, {
+                    success: true,
+                    message: 'Password changed successfully'
+                  });
+                });
+              });
+          });
+      });
+  },
 
 
-    /**
-     * Change user password
-     *
-     * @param {ObjectId} id The ObjectId referent to user identification
-     * @param {String} oldPassword The current used password
-     * @param {String} newPassword The new password to be used
-     * @param {Function} callback Function to process on change password reach end or error
-     */
-    changePassword (id, oldPassword, newPassword, callback) {
-        const self = this;
+  /**
+   * Retrieve an user information
+   *
+   * @param {ObjectId} id The ObjectId referent to user identification
+   * @param {function} callback Function to process on change password reach end or error
+   */
+  get (id, callback) {
+    const notFound = new APIError('No such user found!', httpStatus.NOT_FOUND);
 
-        return self.findById({ _id: id })
-            .select('+password +passwordSalt')
-            .exec((err, user) => {
-                if (err) {
-                    return callback(err, null);
-                }
+    return this.findById({ _id: id })
+      .execAsync()
+      .then(user => {
+        if (!user) {
+          return callback(notFound, null);
+        }
 
-                if (!user) {
-                    return callback(err, user);
-                }
-
-                const anUser = user;
-
-                return passwordHelper.verify(oldPassword, anUser.password, anUser.passwordSalt,
-                    (err, result) => { // eslint-disable-line no-shadow
-                        if (err) {
-                            return callback(err, null);
-                        }
-
-                        if (!result) {
-                            const PassNoMatchError = new Error('Old password does not match');
-                            PassNoMatchError.type = 'old_password_does_not_match';
-
-                            return callback(PassNoMatchError, null);
-                        }
-
-                        return passwordHelper.hashPassword(newPassword,
-                            (err, hashedPass, salt) => { // eslint-disable-line no-shadow
-                                anUser.password = hashedPass;
-                                anUser.passwordSalt = salt;
-
-                                return anUser.save((err) => { // eslint-disable-line no-shadow
-                                    if (err) {
-                                        return callback(err, null);
-                                    }
-
-                                    return callback(err, {
-                                        success: true,
-                                        message: 'Password changed successfully'
-                                    });
-                                });
-                            });
-                    });
-            });
-    },
+        return callback(null, user);
+      })
+      .catch(err => callback(err, null));
+  },
 
 
-    /**
-     * Retrieve an user information
-     *
-     * @param {ObjectId} id The ObjectId referent to user identification
-     * @param {function} callback Function to process on change password reach end or error
-     */
-    get (id, callback) {
-        const notFound = new APIError('No such user found!', httpStatus.NOT_FOUND);
-
-        return this.findById({ _id: id })
-            .execAsync()
-            .then((user) => {
-                if (!user) {
-                    return callback(notFound, null);
-                }
-
-                return callback(null, user);
-            })
-            .catch(err => callback(err, null));
-    },
-
-
-    /**
-     * List users in descending order of 'createdAt' timestamp
-     *
-     * @param {Number} skip Number of users to be skipped
-     * @param {Number} limit Limit number or users to be returned
-     */
-    list ({ skip = 0, limit = 50 } = {}) {
-        return this.find()
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit)
-            .execAsync();
-    }
+  /**
+   * List users in descending order of 'createdAt' timestamp
+   *
+   * @param {Number} skip Number of users to be skipped
+   * @param {Number} limit Limit number or users to be returned
+   */
+  list ({ skip = 0, limit = 50 } = {}) {
+    return this.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .execAsync();
+  }
 };
 
 /**

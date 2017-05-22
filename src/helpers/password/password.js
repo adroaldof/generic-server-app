@@ -18,51 +18,47 @@ const DIGEST = 'sha256';
  * @apiparam {String} salt - optional
  * @apiparam {Function} callback
  */
-function hashPassword (password, salt, callback) {
-    const len = LEN / 2;
+export async function hashPassword (password, salt) {
+  if (typeof password === 'function') {
+    return password(new APIError('Password as string is necessary as first parameter'), null);
+  }
 
-    if (password && callback && typeof callback === 'function') {
-        return crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST,
-            (err, derivedKey) => {
-                if (err) {
-                    return callback(err);
-                }
+  if (!password && typeof salt === 'function') {
+    return salt(new APIError('Password as string is necessary'), null);
+  }
 
-                return callback(null, derivedKey.toString('hex'));
-            });
-    }
+  const len = LEN / 2;
 
-    if (password && salt && typeof salt === 'function') {
-        // If no salt is supplied get second parameter as callback
-        const cb = salt;
+  if (password && salt && typeof salt === 'function') {
+    console.log('-=-= 01');
+    const generatedSalt = await generateToken(SALT_LEN / 2);
+    console.log('-=-= 02');
+    const passwordSalt = generatedSalt.toString('hex');
+    console.log('passwordSalt', passwordSalt);
 
-        return generateToken(SALT_LEN / 2, (err, generatedSalt) => {
-            if (err) {
-                return cb(err);
-            }
+    console.log('====== crypto ==============');
+    const derivedKey = await crypto.pbkdf2(password, passwordSalt, ITERATIONS, len, DIGEST);
+    console.log('---- after');
+    console.log('derivedKey', derivedKey);
+    const derivedKeyString = derivedKey.toString('hex');
 
-            const passwordSalt = generatedSalt.toString('hex');
+    console.log('********************', ' derivedKeyString ', '********************');
+    console.log('derivedKeyString', derivedKeyString);
+    return derivedKeyString;
+  }
 
-            return crypto.pbkdf2(password, passwordSalt, ITERATIONS, len, DIGEST,
-                (error, derivedKey) => {
-                    if (error) {
-                        return cb(error);
-                    }
+  if (password && salt) {
+    console.log('====================');
+    const derivedKey = await crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST);
+    console.log('derivedKey', derivedKey);
+    const derivedKeyString = derivedKey.toString('hex');
 
-                    return cb(null, derivedKey.toString('hex'), passwordSalt);
-                });
-        });
-    }
+    console.log('********************', ' derivedKeyString ', '********************');
+    console.log('derivedKeyString', derivedKeyString);
+    return derivedKeyString;
+  }
 
-    if (typeof password === 'function') {
-        return password(new APIError('Password as string is necessary as first parameter'), null);
-    }
-
-    if (!password && typeof salt === 'function') {
-        return salt(new APIError('Password as string is necessary'), null);
-    }
-
-    return new APIError('Check parameters: passwordString, [passwordSaltString,] callbackFunction');
+  return new APIError('Check parameters: passwordString, [passwordSaltString,] callbackFunction');
 }
 
 /**
@@ -74,18 +70,14 @@ function hashPassword (password, salt, callback) {
  * @apiparam {String} userPasswordSalt
  * @apiparam {Function} callback
  */
-function verify (toCheckPassword, userHashPassword, userPasswordSalt, cb) {
-    return hashPassword(toCheckPassword, userPasswordSalt, (err, hashedPassword) => {
-        if (err) {
-            return cb(err);
-        }
+export async function verify (toCheckPassword, userHashPassword, userPasswordSalt) {
+  console.log('==================');
+  console.log('==================');
+  console.log('toCheckPassword, userHashPassword, userPasswordSalt', toCheckPassword, userHashPassword, userPasswordSalt);
+  console.log('==================');
+  console.log('==================');
+  const hashedPassword = await hashPassword(toCheckPassword, userPasswordSalt);
 
-        if (hashedPassword === userHashPassword) {
-            return cb(null, true);
-        }
-
-        return cb(null, false);
-    });
+  return hashedPassword === userHashPassword;
 }
 
-export default { hashPassword, verify };

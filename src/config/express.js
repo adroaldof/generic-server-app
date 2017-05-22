@@ -1,3 +1,4 @@
+import flash from 'connect-flash';
 import bodyParser from 'body-parser';
 import compress from 'compression';
 import cors from 'cors';
@@ -8,7 +9,6 @@ import expressWinston from 'express-winston';
 import httpStatus from 'http-status';
 import logger from 'morgan';
 import methodOverride from 'method-override';
-import mongoose from 'mongoose';
 import passport from 'passport';
 import path from 'path';
 
@@ -23,13 +23,11 @@ import { default as routes } from './routes';
 
 function init (app) {
   // import MongoStore from 'connect-mongo';
-  const User = mongoose.model('User');
-  const MongoStore = require('connect-mongo')(session); // eslint-disable-line global-require
   const sessionOpts = {
     secret: config.session.secret,
     key: 'skey.sid',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
   };
 
   // View engine setup
@@ -39,6 +37,7 @@ function init (app) {
   app.set('trust proxy');
   app.use(expressValidator());
 
+  app.use(cookieParser());
   // Parse body params and attach them to req.body
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,29 +52,25 @@ function init (app) {
   // Disable 'X-Powered-By' header in response
   app.disable('x-powered-by');
 
-  // Deal with sessions
-  sessionOpts.store = new MongoStore({
-    url: config.db
-  });
-
   app.use(session(sessionOpts));
 
   // Deal with passport
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(flash());
   localStrategy(passport);
 
-  /* istanbul ignore next */
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-
-  /* istanbul ignore next */
-  passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-      done(err, user);
-    });
-  });
+  // #<{(| istanbul ignore next |)}>#
+  // passport.serializeUser((user, done) => {
+  //   done(null, user.id);
+  // });
+  //
+  // #<{(| istanbul ignore next |)}>#
+  // passport.deserializeUser((id, done) => {
+  //   User.findById(id, (err, user) => {
+  //     done(err, user);
+  //   });
+  // });
 
   // Mount static files on root
   app.use('/', core(app));
